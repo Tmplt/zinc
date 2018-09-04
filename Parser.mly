@@ -5,6 +5,7 @@
 
 %token <State__State.id> ID
 %token <int> INTVAL
+%token <string> STRINGVAL
 %token IF THEN ELSE END WHILE DO DONE
 %token TRUE FALSE AND NOT BEQ BLE
 %token SC LP RP ASSIGN PLUS PLUSU MINUS
