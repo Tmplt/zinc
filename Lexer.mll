@@ -23,6 +23,8 @@ let newline = '\r' | '\n' | "\r\n"
 let id      = ['A'-'Z' 'a'-'z' '_']['0'-'9' 'A'-'Z' 'a'-'z' '_']*
 let digits  = ['0'-'9']+
 let strings = ['"']['A'-'Z' 'a'-'z' '0'-'9' ' ' '\t']*['"']
+let hex     = ['0']['x']['0'-'9' 'a'-'f']+
+let bin     = ['0']['b']['0'-'1']+
 
 
 (* lexing rules *)
@@ -50,8 +52,9 @@ rule lex = parse
   | '-'                  { MINUS }
 
   | digits as i          { INTVAL (int_of_string i) }           (* literals/values *)
-
   | strings as s         { STRINGVAL (s) }                      (* strings *)
+  | hex as x             { HEXVAL (int_of_string x) }           (* hex literals *)
+  | bin as b             { BINVAL (int_of_string b) }           (* binary literals *)
 
   | id as s              { ID (add_id s) }
   | white                { lex lexbuf }                         (* white space *)

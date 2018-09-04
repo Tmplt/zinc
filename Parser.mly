@@ -6,6 +6,8 @@
 %token <State__State.id> ID
 %token <int> INTVAL
 %token <string> STRINGVAL
+%token <int> HEXVAL
+%token <int> BINVAL
 %token IF THEN ELSE END WHILE DO DONE
 %token TRUE FALSE AND NOT BEQ BLT BGT
 %token SC LP RP ASSIGN PLUS PLUSU MINUS
@@ -62,7 +64,7 @@ bexpr:
 
 aexpr:
   | LP aexpr RP                    { $2 }
-  | INTVAL                         { Anum (Z.of_int $1) }
+  | INTVAL | HEXVAL | BINVAL       { Anum (Z.of_int $1) }
   | ID                             { Avar $1 }
   | aexpr PLUS aexpr               { Aadd ($1, $3) }
   | aexpr PLUSU aexpr              { Aaddu ($1, $3) }
