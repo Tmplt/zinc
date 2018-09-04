@@ -1,0 +1,4 @@
+(* verification of && *)
+IF 0 <= 1 + 2 + 3 && 1 + 2 + 3 <= 10 THEN
+    success := 1
+END

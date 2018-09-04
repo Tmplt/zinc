@@ -11,6 +11,10 @@
 %token SC LP RP ASSIGN PLUS PLUSU MINUS
 %token EOF
 
+%left PLUS PLUSU MINUS  (* lowest precedence *)
+%left AND NOT           (* medium precedence *)
+%nonassoc SC            (* highest precedence *)
+
 %{
   open Imp__Imp
   open Common
