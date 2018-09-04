@@ -40,7 +40,8 @@ rule lex = parse
   | "&&"                 { AND }
   | "NOT"                { NOT }
   | "="                  { BEQ }
-  | "<="                 { BLE }
+  | "<"                  { BLT }
+  | ">"                  { BGT }
 
   | ';'                  { SC }
   | ":="                 { ASSIGN }

@@ -7,7 +7,7 @@
 %token <int> INTVAL
 %token <string> STRINGVAL
 %token IF THEN ELSE END WHILE DO DONE
-%token TRUE FALSE AND NOT BEQ BLE
+%token TRUE FALSE AND NOT BEQ BLT BGT
 %token SC LP RP ASSIGN PLUS PLUSU MINUS
 %token EOF
 
@@ -45,7 +45,8 @@ bexpr:
   | bexpr AND bexpr                { Band ($1, $3) }
   | NOT bexpr                      { Bnot ($2) }
   | aexpr BEQ aexpr                { Beq ($1, $3) }
-  | aexpr BLE aexpr                { Ble ($1, $3) }
+  | aexpr BLT BEQ aexpr            { Ble ($1, $4) }
+  | aexpr BGT BEQ aexpr            { Ble ($4, $1) }
 
 aexpr:
   | LP aexpr RP                    { $2 }
