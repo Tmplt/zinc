@@ -54,4 +54,5 @@ aexpr:
   | aexpr PLUS aexpr               { Aadd ($1, $3) }
   | aexpr PLUSU aexpr              { Aaddu ($1, $3) }
   | aexpr MINUS aexpr              { Asub ($1, $3) }
+  | MINUS aexpr                    { Asub (Anum (Z.of_int 0), $2) } (* PERF: improve this *)
 
