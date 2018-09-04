@@ -20,6 +20,8 @@
   open Common
   open Env
   open State__State
+
+  let _zero = Anum (Z.of_int 0)
 %}
 
 %start prog
@@ -45,6 +47,16 @@ bexpr:
   | bexpr AND bexpr                { Band ($1, $3) }
   | NOT bexpr                      { Bnot ($2) }
   | aexpr BEQ aexpr                { Beq ($1, $3) }
+  | aexpr BLT aexpr                { let sub = Asub ($1, $3) in
+                                     let leq = Ble (sub, _zero) in
+                                     let neq = Bnot (Beq (sub, _zero)) in
+                                     Band (leq, neq)
+                                   }
+  | aexpr BGT aexpr                { let sub = Asub ($1, $3) in
+                                     let geq = Ble (_zero, sub) in
+                                     let neq = Bnot (Beq (sub, _zero)) in
+                                     Band (geq, neq)
+                                   }
   | aexpr BLT BEQ aexpr            { Ble ($1, $4) }
   | aexpr BGT BEQ aexpr            { Ble ($4, $1) }
 
