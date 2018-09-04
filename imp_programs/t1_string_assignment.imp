@@ -1,2 +1,3 @@
 (* test string assignment *)
-str := "Hello World"
+//str := "Hello world\n\r\t\"World;"
+str := "Hello World";

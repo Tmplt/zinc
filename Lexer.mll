@@ -22,7 +22,7 @@ let white   = [' ' '\t']+
 let newline = '\r' | '\n' | "\r\n"
 let id      = ['A'-'Z' 'a'-'z' '_']['0'-'9' 'A'-'Z' 'a'-'z' '_']*
 let digits  = ['0'-'9']+
-let strings = ['"']['A'-'Z' 'a'-'z' '0'-'9' ' ' '\t']*['"']
+let strings = ['"']_*?['"']
 let hex     = ['0']['x']['0'-'9' 'a'-'f']+
 let bin     = ['0']['b']['0'-'1']+
 
