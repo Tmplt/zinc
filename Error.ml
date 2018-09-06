@@ -26,8 +26,11 @@ let parse_err_msg lexbuf =
   " File " ^ pos.pos_fname ^
   " : Line " ^ string_of_int pos.pos_lnum ^
   " : Position " ^ string_of_int index ^ nl ^
-  submatch (Bytes.to_string lexbuf.lex_buffer) pos.pos_bol '\n' ^ nl ^
-  (String.make index ' ' ) ^ "^" ^ nl
+  (* " : Debug cnum = " ^ string_of_int pos.pos_cnum ^ ", bol = " ^ string_of_int pos.pos_bol ^ nl ^  *)
+  if index >= 0 then
+    submatch (Bytes.to_string lexbuf.lex_buffer) pos.pos_bol '\n' ^ nl ^
+    (String.make index ' ' ) ^ "^" ^ nl
+  else "Unexpected EOF reached"
 
 let set_info lexbuf =
   let pos = lexbuf.lex_curr_p in
