@@ -41,6 +41,7 @@ rule lex = parse
   | "FALSE"              { FALSE }
   | "&&"                 { AND }
   | "NOT"                { NOT }
+  | '!'                  { NOT }
   | "="                  { BEQ }
   | "<"                  { BLT }
   | ">"                  { BGT }
