@@ -11,6 +11,7 @@
 %token IF THEN ELSE END WHILE DO DONE
 %token TRUE FALSE AND NOT BEQ BLT BGT
 %token SC LP RP ASSIGN PLUS PLUSU MINUS
+%token INC DEC
 %token EOF
 
 %left NOT
@@ -25,6 +26,7 @@
   open State__State
 
   let _zero = Anum (Z.of_int 0)
+  let _one  = Anum (Z.of_int 1)
 %}
 
 %start prog
@@ -38,8 +40,15 @@ prog:
 
 com:
   | com SC com                         { Cseq ($1, $3) }
+
   | ID ASSIGN aexpr SC                 { Cassign ($1, $3) }
   | ID ASSIGN aexpr SC com             { Cseq (Cassign ($1, $3), $5) }
+
+  | ID INC SC                          { Cassign ($1, Aadd (Avar $1, _one)) }
+  | ID INC SC com                      { Cseq (Cassign ($1, Aadd (Avar $1, _one)), $4) }
+  | ID DEC SC                          { Cassign ($1, Asub (Avar $1, _one)) }
+  | ID DEC SC com                      { Cseq (Cassign ($1, Asub (Avar $1, _one)), $4) }
+
   | IF bexpr THEN com ELSE com END     { Cif ($2, $4, $6) }
   | IF bexpr THEN com ELSE com END com { Cseq (Cif ($2, $4, $6), $8) }
   | IF bexpr THEN com END              { Cif ($2, $4, Cskip) }
@@ -47,6 +56,7 @@ com:
 
   | WHILE bexpr DO com DONE            { Cwhile ($2, $4) }
   | WHILE bexpr DO com DONE com        { Cseq (Cwhile ($2, $4), $6) }
+
   | com SC                             { $1 }
 
 bexpr:

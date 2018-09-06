@@ -51,6 +51,9 @@ rule lex = parse
   | "+u"                 { PLUSU }
   | '-'                  { MINUS }
 
+  | "++"                 { INC }
+  | "--"                 { DEC }
+
   | digits as i          { INTVAL (int_of_string i) }           (* literals/values *)
   | strings as s         { STRINGVAL (s) }                      (* strings *)
   | hex as x             { HEXVAL (int_of_string x) }           (* hex literals *)
