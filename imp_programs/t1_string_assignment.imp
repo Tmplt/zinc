@@ -1,3 +1,5 @@
 (* test string assignment *)
 //str := "Hello world\n\r\t\"World;"
 str := "Hello World";
+
+// MUSTFAIL

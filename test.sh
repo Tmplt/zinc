@@ -1,6 +1,26 @@
 #!/usr/bin/env bash
 
+retval=0
 for test in imp_programs/*.imp; do
     output=$(./Cimp.native $test -d_ast 2>&1)
-    [[ $? -eq 0 ]] && echo "$test: passed!" || printf "\t\t*****\n$output\n\t\t*****\n"
+    success=$?
+    mustfail=$(grep -E "\/\/.*MUSTFAIL" $test)
+    passed=0
+
+    # Must the compilation fail?
+    if [ ! -z "$mustfail" ]; then
+        [[ $success -ne 0 ]] && passed=1
+    else
+        [[ $success -eq 0 ]] && passed=1
+    fi
+
+    if [ $passed -eq 1 ]; then
+        echo "$test: passed!"
+    else
+        printf "\t\t*****\n$output\n\t\t*****\n"
+        retval=1
+    fi
+
 done
+
+exit $retval

@@ -5,3 +5,4 @@ WHILE NOT y <= 0 DO
   y := y - 1x;
 DONE
 
+// MUSTFAIL
