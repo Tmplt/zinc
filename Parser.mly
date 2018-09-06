@@ -37,71 +37,71 @@
 %%
 
 prog:
-  | com EOF                            { $1 }
+  | com EOF                                           { $1 }
 
 com:
-  | com SC com                         { Cseq ($1, $3) }
+  | com SC com                                        { Cseq ($1, $3) }
 
   (* Assigning new variables *)
-  | ID ASSIGN aexpr SC                 { Cassign ($1, $3) }
-  | ID ASSIGN aexpr SC com             { Cseq (Cassign ($1, $3), $5) }
+  | ID ASSIGN aexpr SC                                { Cassign ($1, $3) }
+  | ID ASSIGN aexpr SC com                            { Cseq (Cassign ($1, $3), $5) }
 
   (* Incrementing/decrementing a variable *)
-  | ID INC SC                          { Cassign ($1, Aadd (Avar $1, _one)) }
-  | ID INC SC com                      { Cseq (Cassign ($1, Aadd (Avar $1, _one)), $4) }
-  | ID DEC SC                          { Cassign ($1, Asub (Avar $1, _one)) }
-  | ID DEC SC com                      { Cseq (Cassign ($1, Asub (Avar $1, _one)), $4) }
+  | ID INC SC                                         { Cassign ($1, Aadd (Avar $1, _one)) }
+  | ID INC SC com                                     { Cseq (Cassign ($1, Aadd (Avar $1, _one)), $4) }
+  | ID DEC SC                                         { Cassign ($1, Asub (Avar $1, _one)) }
+  | ID DEC SC com                                     { Cseq (Cassign ($1, Asub (Avar $1, _one)), $4) }
 
   (* TODO: remove; if-else statements *)
-  | IF bexpr THEN com ELSE com END     { Cif ($2, $4, $6) }
-  | IF bexpr THEN com ELSE com END com { Cseq (Cif ($2, $4, $6), $8) }
-  | IF bexpr THEN com END              { Cif ($2, $4, Cskip) }
-  | IF bexpr THEN com END com          { Cseq (Cif ($2, $4, Cskip), $6) }
+  | IF bexpr THEN com ELSE com END                    { Cif ($2, $4, $6) }
+  | IF bexpr THEN com ELSE com END com                { Cseq (Cif ($2, $4, $6), $8) }
+  | IF bexpr THEN com END                             { Cif ($2, $4, Cskip) }
+  | IF bexpr THEN com END com                         { Cseq (Cif ($2, $4, Cskip), $6) }
 
   (* Improved if-else statements *)
-  | IF bexpr CURLO com CURLC             { Cif ($2, $4, Cskip) }
-  | IF bexpr CURLO com CURLC com         { Cseq (Cif ($2, $4, Cskip), $6) }
-  | IF bexpr CURLO com CURLC ELSE CURLO com CURLC             { Cif ($2, $4, $8) }
-  | IF bexpr CURLO com CURLC ELSE CURLO com CURLC com         { Cseq (Cif ($2, $4, $8), $10) }
+  | IF bexpr CURLO com CURLC                          { Cif ($2, $4, Cskip) }
+  | IF bexpr CURLO com CURLC com                      { Cseq (Cif ($2, $4, Cskip), $6) }
+  | IF bexpr CURLO com CURLC ELSE CURLO com CURLC     { Cif ($2, $4, $8) }
+  | IF bexpr CURLO com CURLC ELSE CURLO com CURLC com { Cseq (Cif ($2, $4, $8), $10) }
 
 
   (* TODO: remove; while loops *)
-  | WHILE bexpr DO com DONE            { Cwhile ($2, $4) }
-  | WHILE bexpr DO com DONE com        { Cseq (Cwhile ($2, $4), $6) }
+  | WHILE bexpr DO com DONE                           { Cwhile ($2, $4) }
+  | WHILE bexpr DO com DONE com                       { Cseq (Cwhile ($2, $4), $6) }
 
   (* Improved while loops *)
-  | WHILE bexpr CURLO com CURLC            { Cwhile ($2, $4) }
-  | WHILE bexpr CURLO com CURLC com        { Cseq (Cwhile ($2, $4), $6) }
+  | WHILE bexpr CURLO com CURLC                       { Cwhile ($2, $4) }
+  | WHILE bexpr CURLO com CURLC com                   { Cseq (Cwhile ($2, $4), $6) }
 
-  | com SC                             { $1 }
+  | com SC                                            { $1 }
 
 bexpr:
-  | LP bexpr RP                        { $2 }
-  | TRUE                               { Btrue }
-  | FALSE                              { Bfalse }
-  | bexpr AND bexpr                    { Band ($1, $3) }
-  | NOT bexpr                          { Bnot ($2) }
-  | aexpr BEQ aexpr                    { Beq ($1, $3) }
-  | aexpr NOT BEQ aexpr                { Bnot (Beq ($1, $4)) }
-  | aexpr BLT aexpr                    { let sub = Asub ($1, $3) in
-                                         let leq = Ble (sub, _zero) in
-                                         let neq = Bnot (Beq (sub, _zero)) in
-                                         Band (leq, neq)
-                                       }
-  | aexpr BGT aexpr                    { let sub = Asub ($1, $3) in
-                                         let geq = Ble (_zero, sub) in
-                                         let neq = Bnot (Beq (sub, _zero)) in
-                                         Band (geq, neq)
-                                       }
-  | aexpr BLT BEQ aexpr                { Ble ($1, $4) }
-  | aexpr BGT BEQ aexpr                { Ble ($4, $1) }
+  | LP bexpr RP                                       { $2 }
+  | TRUE                                              { Btrue }
+  | FALSE                                             { Bfalse }
+  | bexpr AND bexpr                                   { Band ($1, $3) }
+  | NOT bexpr                                         { Bnot ($2) }
+  | aexpr BEQ aexpr                                   { Beq ($1, $3) }
+  | aexpr NOT BEQ aexpr                               { Bnot (Beq ($1, $4)) }
+  | aexpr BLT aexpr                                   { let sub = Asub ($1, $3) in
+                                                        let leq = Ble (sub, _zero) in
+                                                        let neq = Bnot (Beq (sub, _zero)) in
+                                                        Band (leq, neq)
+                                                      }
+  | aexpr BGT aexpr                                   { let sub = Asub ($1, $3) in
+                                                        let geq = Ble (_zero, sub) in
+                                                        let neq = Bnot (Beq (sub, _zero)) in
+                                                        Band (geq, neq)
+                                                      }
+  | aexpr BLT BEQ aexpr                               { Ble ($1, $4) }
+  | aexpr BGT BEQ aexpr                               { Ble ($4, $1) }
 
 aexpr:
-  | LP aexpr RP                        { $2 }
-  | INTVAL | HEXVAL | BINVAL           { Anum (Z.of_int $1) }
-  | ID                                 { Avar $1 }
-  | aexpr PLUS aexpr                   { Aadd ($1, $3) }
-  | aexpr PLUSU aexpr                  { Aaddu ($1, $3) }
-  | aexpr MINUS aexpr                  { Asub ($1, $3) }
-  | MINUS aexpr                        { Asub (_zero, $2) }
+  | LP aexpr RP                                       { $2 }
+  | INTVAL | HEXVAL | BINVAL                          { Anum (Z.of_int $1) }
+  | ID                                                { Avar $1 }
+  | aexpr PLUS aexpr                                  { Aadd ($1, $3) }
+  | aexpr PLUSU aexpr                                 { Aaddu ($1, $3) }
+  | aexpr MINUS aexpr                                 { Asub ($1, $3) }
+  | MINUS aexpr                                       { Asub (_zero, $2) }
 
