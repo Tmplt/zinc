@@ -75,7 +75,9 @@ let () =
       | Lexer.SyntaxError msg -> raise (CompilerError ("Syntax error. " ^ msg ^ parse_err_msg lexbuf));
       | Parser.Error -> raise (CompilerError ("Parser error." ^ parse_err_msg lexbuf));
   with
-  | CompilerError msg -> p_stderr msg;
+  | CompilerError msg ->
+          p_stderr msg;
+          exit (-1);
   | Failure msg -> p_stderr ("Failure (internal error): " ^ msg);
     exit (-1);;
 
