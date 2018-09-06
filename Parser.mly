@@ -42,6 +42,7 @@ com:
   | IF bexpr THEN com ELSE com END { Cif ($2, $4, $6) }
   | IF bexpr THEN com END          { Cif ($2, $4, Cskip) }
   | WHILE bexpr DO com DONE        { Cwhile ($2, $4) }
+  | com SC                         { Cseq ($1, Cskip) }
 
 bexpr:
   | LP bexpr RP                    { $2 }
