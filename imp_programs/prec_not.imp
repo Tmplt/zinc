@@ -1,6 +1,6 @@
 (* verification of NOT *)
 IF NOT 1 + 2 = 3 THEN
-    success := 0
+    success := 0;
 ELSE
-    success := 1
+    success := 1;
 END

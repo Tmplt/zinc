@@ -3,6 +3,6 @@
 x := (1);
 WHILE NOT y <= 0 DO
   x := x * y;
-  y := y - 1x
+  y := y - 1x;
 DONE
 

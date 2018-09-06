@@ -2,7 +2,7 @@
 
 WHILE a <= 5 DO
   a := a + 1;
-  sum := sum + a 
+  sum := sum + a;
 DONE
 
 (*

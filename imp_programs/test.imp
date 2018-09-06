@@ -1,0 +1,10 @@
+a := 1;
+
+WHILE a < 5 DO
+    a := a + 1;
+DONE
+
+b := 2;
+WHILE b < 10 DO
+    b := b + 1;
+DONE

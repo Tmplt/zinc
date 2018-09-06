@@ -1,2 +1,2 @@
 (* test assignment *)
-a := 8 + 9
+a := 8 + 9;

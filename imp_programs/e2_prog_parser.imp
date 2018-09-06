@@ -2,6 +2,6 @@
 x := (1;
 WHILE NOT (y <= 0) DO
   x := x * y;
-  y := y - 1
+  y := y - 1;
 DONE
 

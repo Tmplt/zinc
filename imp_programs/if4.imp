@@ -1,8 +1,8 @@
 (* test if not *)
 IF NOT (NOT FALSE) THEN
-  a := 1
+  a := 1;
 ELSE
-  a := 2
+  a := 2;
 END
 
 (* same as IF FALSE

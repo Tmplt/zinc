@@ -1,8 +1,8 @@
 (* test if a *)
 IF a = 0 THEN
-  a := 1
+  a := 1;
 ELSE
-  a := 2
+  a := 2;
 END
 
 (*
