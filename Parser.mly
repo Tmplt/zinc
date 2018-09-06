@@ -9,6 +9,7 @@
 %token <int> HEXVAL
 %token <int> BINVAL
 %token IF THEN ELSE END WHILE DO DONE
+%token CURLO CURLC
 %token TRUE FALSE AND NOT BEQ BLT BGT
 %token SC LP RP ASSIGN PLUS PLUSU MINUS
 %token INC DEC
@@ -41,21 +42,36 @@ prog:
 com:
   | com SC com                         { Cseq ($1, $3) }
 
+  (* Assigning new variables *)
   | ID ASSIGN aexpr SC                 { Cassign ($1, $3) }
   | ID ASSIGN aexpr SC com             { Cseq (Cassign ($1, $3), $5) }
 
+  (* Incrementing/decrementing a variable *)
   | ID INC SC                          { Cassign ($1, Aadd (Avar $1, _one)) }
   | ID INC SC com                      { Cseq (Cassign ($1, Aadd (Avar $1, _one)), $4) }
   | ID DEC SC                          { Cassign ($1, Asub (Avar $1, _one)) }
   | ID DEC SC com                      { Cseq (Cassign ($1, Asub (Avar $1, _one)), $4) }
 
+  (* TODO: remove; if-else statements *)
   | IF bexpr THEN com ELSE com END     { Cif ($2, $4, $6) }
   | IF bexpr THEN com ELSE com END com { Cseq (Cif ($2, $4, $6), $8) }
   | IF bexpr THEN com END              { Cif ($2, $4, Cskip) }
   | IF bexpr THEN com END com          { Cseq (Cif ($2, $4, Cskip), $6) }
 
+  (* Improved if-else statements *)
+  | IF bexpr CURLO com CURLC             { Cif ($2, $4, Cskip) }
+  | IF bexpr CURLO com CURLC com         { Cseq (Cif ($2, $4, Cskip), $6) }
+  | IF bexpr CURLO com CURLC ELSE CURLO com CURLC             { Cif ($2, $4, $8) }
+  | IF bexpr CURLO com CURLC ELSE CURLO com CURLC com         { Cseq (Cif ($2, $4, $8), $10) }
+
+
+  (* TODO: remove; while loops *)
   | WHILE bexpr DO com DONE            { Cwhile ($2, $4) }
   | WHILE bexpr DO com DONE com        { Cseq (Cwhile ($2, $4), $6) }
+
+  (* Improved while loops *)
+  | WHILE bexpr CURLO com CURLC            { Cwhile ($2, $4) }
+  | WHILE bexpr CURLO com CURLC com        { Cseq (Cwhile ($2, $4), $6) }
 
   | com SC                             { $1 }
 

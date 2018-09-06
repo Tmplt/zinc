@@ -29,19 +29,21 @@ let bin     = ['0']['b']['0'-'1']+
 
 (* lexing rules *)
 rule lex = parse
-  | "IF"                 { IF }
+  | "IF"    | "if"       { IF }
   | "THEN"               { THEN }
-  | "ELSE"               { ELSE }
+  | "ELSE"  | "else"     { ELSE }
   | "END"                { END }
-  | "WHILE"              { WHILE }
+  | "WHILE" | "while"    { WHILE }
   | "DO"                 { DO }
   | "DONE"               { DONE }
 
-  | "TRUE"               { TRUE }
-  | "FALSE"              { FALSE }
+  | '{'                  { CURLO }
+  | '}'                  { CURLC }
+
+  | "TRUE"  | "true"     { TRUE }
+  | "FALSE" | "false"    { FALSE }
   | "&&"                 { AND }
-  | "NOT"                { NOT }
-  | '!'                  { NOT }
+  | "NOT"   | '!'        { NOT }
   | "="                  { BEQ }
   | "<"                  { BLT }
   | ">"                  { BGT }
