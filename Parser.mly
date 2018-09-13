@@ -88,11 +88,7 @@ bexpr:
                                                         let neq = Bnot (Beq (sub, _zero)) in
                                                         Band (leq, neq)
                                                       }
-  | aexpr BGT aexpr                                   { let sub = Asub ($1, $3) in
-                                                        let geq = Ble (_zero, sub) in
-                                                        let neq = Bnot (Beq (sub, _zero)) in
-                                                        Band (geq, neq)
-                                                      }
+  | aexpr BGT aexpr                                   { Bnot (Ble ($1, $3)) }
   | aexpr BLT BEQ aexpr                               { Ble ($1, $4) }
   | aexpr BGT BEQ aexpr                               { Ble ($4, $1) }
 
