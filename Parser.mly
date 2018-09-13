@@ -61,17 +61,6 @@ com:
   | ID ASSIGN aexpr_span SC                                               { Cassign ($1, $3) }
   | ID ASSIGN aexpr_span SC com_span                                      { Cseq ((Cassign ($1, $3), ($startofs, $endofs)), $5) }
 
-
-(*
-  (* Incrementing/decrementing a variable *)
-  (* TODO: consider if this is worth keeping *)
-  | ID INC SC                                                             { Cassign ($1, Aadd (Avar $1, _one)) }
-  | ID INC SC com_span                                                    { Cseq (Cassign ($1, Aadd (Avar $1, _one)), $4) }
-  | ID DEC SC                                                             { Cassign ($1, Asub (Avar $1, _one)) }
-  | ID DEC SC com_span                                                    { Cseq (Cassign ($1, Asub (Avar $1, _one)), $4) }
-*)
-
-
   (* if-else statements *)
   | IF bexpr_span CURLO com_span CURLC                                    { Cif ($2, $4, _skip) }
   | IF bexpr_span CURLO com_span CURLC com_span                           { let cif = Cif ($2, $4, _skip) in
