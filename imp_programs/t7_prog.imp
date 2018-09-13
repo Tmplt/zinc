@@ -1,8 +1,8 @@
 (* test seq, imp_ex 7 steps, vm_ex 44 steps *)
 sum := 0;
 i := 0;
-WHILE i <= 3 DO
+WHILE i <= 3 {
   i := i + 1;
   sum := sum + i;
-DONE
+}
 

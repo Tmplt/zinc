@@ -1,6 +1,6 @@
 (* verification of NOT *)
-IF NOT 1 + 2 = 3 THEN
+IF NOT 1 + 2 = 3 {
     success := 0;
-ELSE
+} ELSE {
     success := 1;
-END
+}

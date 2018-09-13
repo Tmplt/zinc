@@ -1,9 +1,9 @@
 (* summation *)
 
-WHILE a <= 5 DO
+WHILE a <= 5 {
   a := a + 1;
   sum := sum + a;
-DONE
+}
 
 (*
 a = 0

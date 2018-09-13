@@ -30,12 +30,8 @@ let bin     = ['0']['b']['0'-'1']+
 (* lexing rules *)
 rule lex = parse
   | "IF"    | "if"       { IF }
-  | "THEN"               { THEN }
   | "ELSE"  | "else"     { ELSE }
-  | "END"                { END }
   | "WHILE" | "while"    { WHILE }
-  | "DO"                 { DO }
-  | "DONE"               { DONE }
 
   | '{'                  { CURLO }
   | '}'                  { CURLC }

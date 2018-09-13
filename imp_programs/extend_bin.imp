@@ -1,5 +1,5 @@
-IF 0b101 = 5 THEN
+IF 0b101 = 5 {
     success := 1;
-ELSE
+} ELSE {
     success := 0;
-END
+}

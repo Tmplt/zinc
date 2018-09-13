@@ -1,11 +1,11 @@
 (* test if a *)
 a := 1;
 b := 2;
-IF a = 1 && b = 2 THEN
+IF a = 1 && b = 2 {
   a := 10;
-ELSE
+} ELSE {
   a := 20;
-END
+}
 
 (*
 *)

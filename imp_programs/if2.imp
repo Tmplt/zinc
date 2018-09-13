@@ -1,9 +1,9 @@
 (* test if1 *)
-IF FALSE THEN
+IF FALSE {
   a := 1;
-ELSE
+} ELSE {
   a := 2;
-END
+}
 
 (*
 Ibranch 3;

@@ -1,8 +1,8 @@
 (* parser error at (1; *)
 x := (1;
-WHILE NOT (y <= 0) DO
+WHILE NOT (y <= 0) {
   x := x * y;
   y := y - 1;
-DONE
+}
 
 // MUSTFAIL

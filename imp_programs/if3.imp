@@ -1,9 +1,9 @@
 (* test if not *)
-IF NOT FALSE THEN
+IF NOT FALSE {
   a := 1;
-ELSE
+} ELSE {
   a := 2;
-END
+}
 
 (* same as IF TRUE
 Iconst 1;

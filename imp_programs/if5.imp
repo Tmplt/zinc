@@ -1,9 +1,9 @@
 (* test if a *)
-IF a = 0 THEN
+IF a = 0 {
   a := 1;
-ELSE
+} ELSE {
   a := 2;
-END
+}
 
 (*
 *)

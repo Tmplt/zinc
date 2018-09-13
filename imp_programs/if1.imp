@@ -1,9 +1,9 @@
 (* test if1 *)
-IF TRUE THEN
+IF TRUE {
   a := 1;
-ELSE
+} ELSE {
   a := 2;
-END
+}
 
 (*
 Iconst 1;

@@ -1,9 +1,9 @@
 (* test if 1 <= 1 *)
-IF 1 <= 1 THEN
+IF 1 <= 1 {
   a := 10;
-ELSE
+} ELSE {
   a := 20;
-END
+}
 
 (*
 *)

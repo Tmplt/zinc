@@ -11,4 +11,4 @@ test: build $(TEST_FILES)
 	@./test.sh
 
 clean:
-	@- rm -rf _build
+	@- rm -rf _build Parser.ml Parser.mli

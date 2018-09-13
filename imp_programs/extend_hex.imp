@@ -1,5 +1,5 @@
-IF 0x3039 = 12345 THEN
+IF 0x3039 = 12345 {
     success := 1;
-ELSE
+} ELSE {
     success := 0;
-END
+}
