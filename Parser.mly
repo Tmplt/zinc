@@ -77,7 +77,7 @@ com:
                                                                             Cseq ((cwhile, ($startofs, $endofs)), $6)
                                                                           }
 
-  | com SC                                                                { $1 }
+  | com_span SC                                                           { Cseq ($1, _skip) }
 
 bexpr_span:
   | bexpr                                                                 { ($1, ($startofs, $endofs)) }
