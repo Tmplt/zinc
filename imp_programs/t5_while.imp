@@ -1,2 +1,3 @@
+a : SINT;
 WHILE TRUE { a := a + 1; }
 

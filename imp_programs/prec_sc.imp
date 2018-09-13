@@ -1,2 +1,4 @@
 (* verification of SC ';' *)
+a : SINT;
+b : SINT;
 a := 1 + 2 + 3 + 4 + 5 - 10 ; b := 1;

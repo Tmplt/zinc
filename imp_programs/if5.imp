@@ -1,4 +1,5 @@
 (* test if a *)
+a : SINT;
 IF a = 0 {
   a := 1;
 } ELSE {

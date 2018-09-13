@@ -1,4 +1,5 @@
 (* test if 2 <= 1 *)
+a : SINT;
 IF 2 <= 1 {
   a := 10;
 } ELSE {

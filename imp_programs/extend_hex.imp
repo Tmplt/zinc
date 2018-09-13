@@ -1,3 +1,4 @@
+success : SINT;
 IF 0x3039 = 12345 {
     success := 1;
 } ELSE {

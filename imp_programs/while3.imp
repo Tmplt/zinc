@@ -1,4 +1,7 @@
 (* test more complex loop *)
+a : SINT;
+b : SINT;
+
 WHILE a <= 30 && (NOT b = 1) {
   a := a + 1;
   IF a = 20 { b := 1; }

@@ -1,3 +1,4 @@
+success : SINT;
 IF 5 < 10 && NOT 5 < 5 {
     success := 1;
 } ELSE {

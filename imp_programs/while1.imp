@@ -1,4 +1,5 @@
 (* test if 1 <= 2 *)
+a : SINT;
 WHILE TRUE {
   a := 1;
 }

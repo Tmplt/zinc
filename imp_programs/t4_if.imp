@@ -1,3 +1,6 @@
+a : SINT;
+b : SINT;
+
 IF TRUE { a := 1; } ELSE { b := 2; }
 
 

@@ -1,1 +1,3 @@
+a : SINT;
+b : SINT;
 a := 3 ; b := (-a);

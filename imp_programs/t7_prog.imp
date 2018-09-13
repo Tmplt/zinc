@@ -1,4 +1,7 @@
 (* test seq, imp_ex 7 steps, vm_ex 44 steps *)
+sum : SINT;
+i : SINT;
+
 sum := 0;
 i := 0;
 WHILE i <= 3 {

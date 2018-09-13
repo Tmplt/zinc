@@ -1,4 +1,5 @@
 (* parser error at 1x *)
+x : SINT;
 x := (1);
 WHILE NOT y <= 0 {
   x := x * y;

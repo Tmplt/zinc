@@ -1,2 +1,3 @@
 (* test arith paren *)
+a : SINT;
 a := 7 - (1 + 1);

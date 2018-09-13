@@ -1,3 +1,4 @@
+success : SINT;
 IF 0b101 = 5 {
     success := 1;
 } ELSE {

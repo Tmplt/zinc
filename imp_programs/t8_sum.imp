@@ -1,4 +1,6 @@
 (* summation *)
+a : SINT;
+sum : SINT;
 
 WHILE a <= 5 {
   a := a + 1;
