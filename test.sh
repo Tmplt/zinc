@@ -17,6 +17,7 @@ for test in imp_programs/*.imp; do
     if [ $passed -eq 1 ]; then
         echo "$test: passed!"
     else
+        echo "$test: failed!"
         printf "\t\t*****\n$output\n\t\t*****\n"
         retval=1
     fi
