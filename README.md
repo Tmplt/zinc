@@ -1,5 +1,31 @@
 # Cimp, compiler harness for D7011E, Compiler Construction
 
+This (new) version includes span information in the 'T_Imp.ml' AST, along with a simle type checker.
+
+## Todo:
+
+The examples are not updated, you need to add type information, e.g.
+
+```
+(* tc_1.imp passes type checking *)
+a : SINT;   (* types must be declared *)
+b : UINT32;
+a := a + 1;
+b := b +u 1
+```
+
+and
+```
+(* tc_2.imp fails type checking *)
+a : SINT;   (* types must be declared *)
+b : UINT32;
+a := a + 1;
+b := a +u 1
+
+Type error: Expected UINT32 got SINT in:<105..106> a
+in command: <100..111> b := a +u 1
+```
+
 ## Requirements:
 
 Dependencies:
@@ -117,6 +143,9 @@ Files:
 ├── Lexer.mll               Lexer rules
 ├── Options.ml              Command line options (used by Cmd)
 ├── Parser.mly              Parser rules
+├── T_Check.ml              Type checker
+├── T_Dump.ml               Printing of T_AST (the input language AST)
+├── T_Imp.ml                The input language AST
 ├── README.md               This file
 ├── _build                  Build directory for OCaml
 ├── examples                Some examples

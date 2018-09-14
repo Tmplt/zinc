@@ -10,28 +10,34 @@ open State__State
 
 module Imp = Imp__Imp
 
+(* converting a span to a string *)
 let of_span inb (start, stop) = 
   let _ = seek_in inb start in
   let s = really_input_string inb (stop - start) in
   "<" ^ string_of_int start ^ ".." ^ string_of_int stop ^ "> " ^ s
 
+(* report a duplicate definition *)
 let unique_id chan (id1, (t1, s1)) (id2, (t2, s2)) = 
   if id1 = id2 then 
     raise (CompilerError("Dupclicate variable definition: " ^
                          of_span chan s1 ^ " already declared at " ^  of_span chan s2)) 
   else ()
 
+(* build a type environment in acc *)
 let rec idt_acc ch sp acc = function 
-  | Dseq (d1, d2) ->  (idt_acc_span ch (idt_acc_span ch acc d1) d2) 
-  | Ddecl (id, t) -> List.iter (unique_id ch (id, (t, sp))) acc;
+  | Dseq (d1, d2) -> 
+    idt_acc_span ch (idt_acc_span ch acc d1) d2 
+  | Ddecl (id, t) -> 
+    (* check that the identifier is not yet declared *)
+    List.iter (unique_id ch (id, (t, sp))) acc; 
+    (* add the identifier to acc *)
     (id, (t, sp)) :: acc
-
 and idt_acc_span c acc (d, s) = idt_acc c s acc d
 
 let of_idt ch (id, (t,s)) =
   of_id id ^ ":" ^ of_types t ^ of_span ch s
 
-
+(* unify t2 to be compatible to the expected type t1 *)
 let tc_unify ch t1 t2 s2 : types =
   match t1, t2 with
   | Tsint,    Tsint     -> Tsint
@@ -43,6 +49,7 @@ let tc_unify ch t1 t2 s2 : types =
         "Type error: Expected " ^  of_types t1 ^ 
         " got "  ^ of_types t2 ^ " in:" ^ of_span ch s2))
 
+(* unify types t1 and t2 *)
 let tc_unify2 ch t1 s1 t2 s2 : types =
   match t1, t2 with
   | Tsint,    Tsint     -> Tsint
@@ -54,6 +61,7 @@ let tc_unify2 ch t1 s1 t2 s2 : types =
         "Type error: " ^ of_types t1 ^ " in:" ^ of_span ch s1 ^
         " does not match " ^ of_types t2 ^ " in:" ^ of_span ch s2))
 
+(* lookup of identifier id in the type environment itl *)
 let get_id_type itl (id : id) : types * span =
   try
     List.assoc id itl

@@ -1,0 +1,5 @@
+(* tc_2.imp fails type checking *)
+a : SINT;   (* types must be declared *)
+b : UINT32;
+a := a + 1;
+b := a +u 1
