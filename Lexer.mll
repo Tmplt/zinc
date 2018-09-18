@@ -33,8 +33,8 @@ rule lex = parse
   | "ELSE"  | "else"     { ELSE }
   | "WHILE" | "while"    { WHILE }
 
-  | '{'                  { CURLO }
-  | '}'                  { CURLC }
+  | '{'                  { LC }
+  | '}'                  { RC }
 
   | "TRUE"  | "true"     { TRUE }
   | "FALSE" | "false"    { FALSE }
