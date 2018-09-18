@@ -41,8 +41,8 @@ let of_span inb (offset, _) =
     ": Position " ^ string_of_int (column + 1) ^ nl in
   let _ = seek_line inb line in
   let statement = input_line inb in
-  info ^ statement ^ nl ^
-  (String.make column ' ') ^ "^" ^ nl
+  info ^ "  " ^ statement ^ nl ^
+  "  " ^ (String.make column ' ') ^ "^" ^ nl
 
 (* report a duplicate definition *)
 let unique_id chan (id1, (t1, s1)) (id2, (t2, s2)) = 
@@ -87,7 +87,7 @@ let tc_unify2 ch t1 s1 t2 s2 : types =
   | _,        _         ->
     raise (TypeError(
         "Type error: " ^ of_types t1 ^ " in:" ^ of_span ch s1 ^
-        " does not match " ^ of_types t2 ^ " in:" ^ of_span ch s2))
+        "does not match " ^ of_types t2 ^ " in:" ^ of_span ch s2))
 
 (* lookup of identifier id in the type environment itl *)
 let get_id_type itl (id : id) : types * span =
