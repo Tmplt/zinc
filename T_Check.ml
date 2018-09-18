@@ -10,11 +10,39 @@ open State__State
 
 module Imp = Imp__Imp
 
+(* Given an offset, count which line and column in a file that offset points to. *)
+let rec channel_line_and_rest channel offset linecount =
+  try
+    let len = String.length (input_line channel) + 1 in
+    if len > offset then
+      (linecount, offset)
+    else
+      channel_line_and_rest channel (offset - len) (linecount + 1)
+  with End_of_file ->
+    (linecount, offset)
+
+(* Seeks in-file to the start of the nth line. *)
+let seek_line channel n =
+  let _ = seek_in channel 0 in
+  let line = ref 1 in
+  while !line != n do
+    while (input_char channel != '\n') do () done;
+    line := !line + 1;
+  done
+
 (* converting a span to a string *)
-let of_span inb (start, stop) = 
-  let _ = seek_in inb start in
-  let s = really_input_string inb (stop - start) in
-  "<" ^ string_of_int start ^ ".." ^ string_of_int stop ^ "> " ^ s
+let of_span inb (offset, _) =
+  let _ = seek_in inb 0 in
+  let (line, column) = channel_line_and_rest inb offset 1 in
+  let info =
+    " Line " ^ string_of_int line ^
+    (* column is technically off-by-one here since it points to the start of the span,
+     * instead of pointing to the start of the command in question. *)
+    ": Position " ^ string_of_int (column + 1) ^ nl in
+  let _ = seek_line inb line in
+  let statement = input_line inb in
+  info ^ statement ^ nl ^
+  (String.make column ' ') ^ "^" ^ nl
 
 (* report a duplicate definition *)
 let unique_id chan (id1, (t1, s1)) (id2, (t2, s2)) = 
@@ -148,7 +176,7 @@ let rec tc_com ch itl span com =
     | Cwhile (b, c) -> Imp.Cwhile(tc_bexpr ch itl b, tc_com_span ch itl c)
     | Cskip -> Imp.Cskip
   with
-  | TypeError msg -> raise (CompilerError (msg ^ nl ^ "in command: " ^ of_span ch span ))
+  | TypeError msg -> raise (CompilerError (msg))
 and
   tc_com_span ch itl (com, span)  = tc_com ch itl span com
 
