@@ -24,4 +24,12 @@ for test in imp_programs/*.imp; do
 
 done
 
+if [ $retval -eq 0 ]; then
+  echo
+  echo "All tests passed successfully!"
+else
+  echo
+  echo "Some tests failed!"
+fi
+
 exit $retval
