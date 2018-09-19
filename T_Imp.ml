@@ -1,5 +1,5 @@
-
-module Imp = Imp__Imp 
+module Imp = Imp__Imp
+module State = State__State
 
 type types =
   | Tsint
@@ -10,7 +10,7 @@ type span = int * int
 
 type aexpr =
   | Anum of (Z.t)
-  | Avar of State__State.id
+  | Avar of State.id
   | Aadd of aexpr_span * aexpr_span
   | Aaddu of aexpr_span * aexpr_span
   | Asub of aexpr_span * aexpr_span
@@ -30,14 +30,14 @@ and bexpr_span = bexpr * span
 type com =
   | Cskip
   | Cseq of com_span * com_span
-  | Cassign of State__State.id * aexpr_span
+  | Cassign of State.id * aexpr_span
   | Cif of bexpr_span * com_span * com_span
   | Cwhile of bexpr_span * com_span
 and com_span = com * span
 
 type decl =
   | Dseq of decl_span * decl_span
-  | Ddecl of State__State.id * types 
+  | Ddecl of State.id * types 
 and decl_span = decl * span
 
 type prog = Prog of decl_span * com_span
@@ -46,9 +46,10 @@ type prog = Prog of decl_span * com_span
 let rec imp_of_aexpr = function
   | Anum n -> Imp.Anum n
   | Avar id -> Imp.Avar id
-  | Aadd (a1, a2) -> Imp.Aadd(imp_of_aexpr_span a1, imp_of_aexpr_span a2) 
-  | Aaddu (a1, a2) -> Imp.Aaddu(imp_of_aexpr_span a1, imp_of_aexpr_span a2) 
-  | Asub (a1, a2) -> Imp.Asub(imp_of_aexpr_span a1, imp_of_aexpr_span a2) 
+  | Aadd (a1, a2) -> Imp.Aadd(imp_of_aexpr_span a1, imp_of_aexpr_span a2)
+  | Aaddu (a1, a2) -> Imp.Aaddu(imp_of_aexpr_span a1, imp_of_aexpr_span a2)
+  | Asub (a1, a2) -> Imp.Asub(imp_of_aexpr_span a1, imp_of_aexpr_span a2)
+  | Acast (_, _) -> raise (Common.CompilerError "Not implemented here")
 and
   imp_of_aexpr_span (a, _) = imp_of_aexpr a
 
@@ -70,8 +71,3 @@ let rec imp_of_com = function
   | Cwhile (b, c) -> Imp.Cwhile(imp_of_bexpr_span b, imp_of_com_span c)
 and
   imp_of_com_span (c, _) = imp_of_com c
-
-
-
-
-
