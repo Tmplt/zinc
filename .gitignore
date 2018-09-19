@@ -6,3 +6,4 @@ _build
 .projectSettings
 
 imp_programs/test.imp
+.direnv.*
