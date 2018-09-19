@@ -42,7 +42,7 @@ let of_span inb (offset, _) =
   let _ = seek_line inb line in
   let statement = input_line inb in
   info ^ "  " ^ statement ^ nl ^
-  "  " ^ (String.make column ' ') ^ "^" ^ nl
+  tab ^ (String.make column ' ') ^ "^" ^ nl
 
 (* report a duplicate definition *)
 let unique_id chan (id1, (t1, s1)) (id2, (t2, s2)) = 
@@ -133,7 +133,19 @@ let rec tc_aexpr ch itl (a, span) : Imp.aexpr * types =
     let (ai2, t2) = tc_aexpr ch itl (a2, a2_span) in
     let _ = tc_unify ch Tsint t2 a2_span in
 
-    (Imp.Asub(ai1, ai2), t1)  
+    (Imp.Asub(ai1, ai2), t1)
+  | Acast (t, a_span) ->
+    let (_, span) = a_span in
+    match t with
+    | Tuint32 ->
+      raise (TypeError (
+        "Type error: " ^ of_types t ^ " in:" ^ of_span ch span ^
+        "is an illegal cast"))
+    | _ ->
+      let (a, _) = tc_aexpr ch itl a_span in
+      (a, t)
+
+
 (* with
    | TypeError msg -> raise (TypeError (msg ^ nl ^ "in expression:" ^ of_span ch span )) *)
 

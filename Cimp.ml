@@ -62,7 +62,7 @@ let () =
           p_stdout ("execution halted");
           p_stdout ("instr_iter_ex" ^ nl ^ Env.to_string st_halt ^ nl);
           ()
-      );  
+      );
 
       p_stdout ("Done!");
 

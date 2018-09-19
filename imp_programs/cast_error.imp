@@ -1,0 +1,7 @@
+(* Casting from UINT32 to SINT *)
+a : SINT;   (* types must be declared *)
+b : UINT32;
+b := 5;
+a := ((UINT32) b) + a;
+
+// MUSTFAIL

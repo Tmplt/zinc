@@ -108,3 +108,6 @@ aexpr:
   | aexpr_span PLUSU aexpr_span                               { Aaddu ($1, $3) }
   | aexpr_span MINUS aexpr_span                               { Asub ($1, $3) }
   | MINUS aexpr_span                                          { Asub ((_zero, ($startofs, $endofs)), $2) }
+
+  (* Casting to another type *)
+  | LP primtype RP aexpr_span                                 { Acast ($2, $4) }

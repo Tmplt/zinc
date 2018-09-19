@@ -22,6 +22,7 @@ let rec of_aexpr = function
   | Avar id         -> "Avar " ^ of_id id
   | Aadd (e1, e2)   -> "Aadd (" ^ of_aexpr_span e1 ^ ") (" ^ of_aexpr_span e2 ^ ")"
   | Aaddu (e1, e2)  -> "Aaddu (" ^ of_aexpr_span e1 ^ ") (" ^ of_aexpr_span e2 ^")"
+  | Acast (t, a)   -> "Acast (" ^ of_types t ^ ") (" ^ of_aexpr_span a ^ ")"
   | Asub (e1, e2)   -> "Asub (" ^ of_aexpr_span e1 ^ ") (" ^ of_aexpr_span e2 ^")"
 and of_aexpr_span (e, (start, stop)) = 
   "< (" ^ string_of_int start ^ ", " ^ string_of_int stop ^ 
