@@ -1,11 +1,11 @@
-(* Copyright Per Lindgren 2016-2018, see the file "LICENSE" *)
-(* for the full license governing this code.                *)
+(* Copyright Per Lindgren, Viktor Sonesten 2016-2018, see the file "LICENSE" *)
+(* for the full license governing this code.                                 *)
 
 open Common
 open Options
 
 let usage =
-  "The cimp v1.0 compiler, Per Lindgren (c) 2018" ^ nl ^ "Options summary:"
+  "The zinc v1.0 compiler, Per Lindgren, Viktor Sonesten (c) 2018" ^ nl ^ "Options summary:"
 
 let o_verbose   = ref false
 let o_debug     = ref false
@@ -18,23 +18,25 @@ let d_past      = ref false
 let d_code      = ref false
 let d_pcode     = ref false
 let imp_ex      = ref false
+let imp_exn     = ref false
 let vm_ex       = ref false
 
 
 let speclist =
   [
-    ("-i", Arg.Set_string f_infile,   "\t\t: infile (-i optional)");
-    ("-o", Arg.Set_string f_outfile,  "\t\t: outfile (default infile.s)");
+    ("-i",       Arg.Set_string f_infile,  "\t\t: infile (-i optional)");
+    ("-o",       Arg.Set_string f_outfile, "\t\t: outfile (default infile.s)");
 
-    ("-v", Arg.Set o_verbose,         "\t\t: verbose mode (default disable)");
-    ("-D", Arg.Set o_debug,           "\t\t: debug mode (default disable)");
+    ("-v",       Arg.Set o_verbose,        "\t\t: verbose mode (default disable)");
+    ("-D",       Arg.Set o_debug,          "\t\t: debug mode (default disable)");
 
-    ("-d_ast", Arg.Set d_ast,         "\t: dump AST");
-    ("-d_past", Arg.Set d_past,       "\t: dump pretty AST");
-    ("-d_code", Arg.Set d_code,       "\t: dump code");
-    ("-d_pcode", Arg.Set d_pcode,     "\t: dump pretty code");
-    ("-imp_ex", Arg.Set imp_ex,   "\t: imp_ex evaluation");
-    ("-vm_ex", Arg.Set vm_ex,     "\t: vm_ex virtual machine execution");
+    ("-d_ast",   Arg.Set d_ast,            "\t: dump AST");
+    ("-d_past",  Arg.Set d_past,           "\t: dump pretty AST");
+    ("-d_code",  Arg.Set d_code,           "\t: dump code");
+    ("-d_pcode", Arg.Set d_pcode,          "\t: dump pretty code");
+    ("-imp_ex",  Arg.Set imp_ex,           "\t: imp_ex evaluation");
+    ("-imp_exn", Arg.Set imp_exn,          "\t: imp_exn evaluation");
+    ("-vm_ex",   Arg.Set vm_ex,            "\t: vm_ex virtual machine execution");
   ]
 
 (* check if e is a file extension of s *)
@@ -76,6 +78,7 @@ let cmd =
     opt.d_code    <- ! d_code;
     opt.d_pcode   <- ! d_pcode;
     opt.imp_ex    <- ! imp_ex;
+    opt.imp_exn   <- ! imp_exn;
     opt.vm_ex     <- ! vm_ex;
   with
   | Arg.Bad msg -> p_stderr ("Command line error: " ^ msg); exit (-1);

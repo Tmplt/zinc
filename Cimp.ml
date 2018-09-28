@@ -8,6 +8,7 @@ open Common
 module Compile = Compiler__Compile_com
 module Vm_Ex = Vm_ex__Vm_Ex
 module Imp_Ex = Imp_ex_assignment__Imp_ex
+module Imp_Exn = Imp_ex_assignment__Imp_exn
 module State = State__State
 
 module Imp = Imp__Imp
@@ -47,6 +48,15 @@ let () =
           p_stdout ("Execute : imp_ex" );
           let st_end = Imp_Ex.ceval_ex st_0 com in
           p_stdout ("ceval_ex" ^ nl ^ Env.to_string st_end ^ nl);
+        with
+        | _ -> p_stdout "ceval : Exited with an error\n";
+      );
+
+      if Options.opt.imp_exn then (
+        try
+          p_stdout ("Execute : imp_exn");
+          let (st_end, cnt) = Imp_Exn.ceval_ex st_0 com in
+          p_stdout ("ceval_exn in " ^ Z.to_string cnt ^ " steps" ^ nl ^ Env.to_string st_end ^ nl);
         with
         | _ -> p_stdout "ceval : Exited with an error\n";
       );
