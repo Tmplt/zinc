@@ -2,7 +2,7 @@
 (* for the full license governing this code.           *)
 
 (* local files *)
-open Common 
+open Common
 
 (* extracted code (/extract) *)
 module Compile = Compiler__Compile_com
@@ -24,7 +24,7 @@ let () =
       let p = Parser.prog Lexer.lex lexbuf in
       (* (* Comment out to get a Dump of the T_Imp with (some) span information *)
 
-         p_stdout ("Decl:" ^ nl ^ T_Dump.of_prog p);  
+         p_stdout ("Decl:" ^ nl ^ T_Dump.of_prog p);
       *)
 
       let com = T_Check.tc_prog inBuffer p in
@@ -49,16 +49,20 @@ let () =
           let st_end = Imp_Ex.ceval_ex st_0 com in
           p_stdout ("ceval_ex" ^ nl ^ Env.to_string st_end ^ nl);
         with
-        | _ -> p_stdout "ceval : Exited with an error\n";
+        | _ -> raise (InterpreterError "ceval : Exited with an error\n");
       );
 
+      (* imp_exn execution with optional step limit *)
       if Options.opt.imp_exn then (
         try
           p_stdout ("Execute : imp_exn");
-          let (st_end, cnt) = Imp_Exn.ceval_ex st_0 com in
+          let (st_end, cnt) = Imp_Exn.ceval_ex st_0 com (Z.of_int Options.opt.imp_exn_limit) in
           p_stdout ("ceval_exn in " ^ Z.to_string cnt ^ " steps" ^ nl ^ Env.to_string st_end ^ nl);
         with
-        | _ -> p_stdout "ceval : Exited with an error\n";
+        | Imp_Exn.MaxStepsReached st ->
+          raise (InterpreterError ("maximum steps reached!" ^ nl ^
+            Env.to_string st ^ nl));
+        | _ -> raise (InterpreterError "cevaln : Exited with an error\n");
       );
 
       (* vm_ex execution *)
@@ -77,10 +81,12 @@ let () =
       p_stdout ("Done!");
 
     with
-    | Lexer.SyntaxError msg -> 
-      raise (CompilerError ("Syntax error. " ^ msg ^ Error.parse_err_msg inBuffer lexbuf));
-    | Parser.Error -> 
+    | Lexer.SyntaxError msg ->
+      raise (CompilerError ("Syntax error: " ^ msg ^ Error.parse_err_msg inBuffer lexbuf));
+    | Parser.Error ->
       raise (CompilerError ("Parser error." ^ Error.parse_err_msg inBuffer lexbuf));
+    | InterpreterError msg ->
+      raise (CompilerError ("Interpreter error: " ^ msg));
 
   with
   | CompilerError msg -> p_stderr msg;

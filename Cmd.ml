@@ -7,19 +7,20 @@ open Options
 let usage =
   "The zinc v1.0 compiler, Per Lindgren, Viktor Sonesten (c) 2018" ^ nl ^ "Options summary:"
 
-let o_verbose   = ref false
-let o_debug     = ref false
+let o_verbose     = ref false
+let o_debug       = ref false
 
-let f_infile    = ref ""
-let f_outfile   = ref ""
+let f_infile      = ref ""
+let f_outfile     = ref ""
 
-let d_ast       = ref false
-let d_past      = ref false
-let d_code      = ref false
-let d_pcode     = ref false
-let imp_ex      = ref false
-let imp_exn     = ref false
-let vm_ex       = ref false
+let d_ast         = ref false
+let d_past        = ref false
+let d_code        = ref false
+let d_pcode       = ref false
+let imp_ex        = ref false
+let imp_exn       = ref false
+let imp_exn_limit = ref 0
+let vm_ex         = ref false
 
 
 let speclist =
@@ -36,6 +37,7 @@ let speclist =
     ("-d_pcode", Arg.Set d_pcode,          "\t: dump pretty code");
     ("-imp_ex",  Arg.Set imp_ex,           "\t: imp_ex evaluation");
     ("-imp_exn", Arg.Set imp_exn,          "\t: imp_exn evaluation");
+    ("-n",       Arg.Set_int imp_exn_limit, "\t: imp_exn step limit");
     ("-vm_ex",   Arg.Set vm_ex,            "\t: vm_ex virtual machine execution");
   ]
 
@@ -80,6 +82,9 @@ let cmd =
     opt.imp_ex    <- ! imp_ex;
     opt.imp_exn   <- ! imp_exn;
     opt.vm_ex     <- ! vm_ex;
+
+    (* imp_exn step limit *)
+    opt.imp_exn_limit <- !imp_exn_limit;
   with
   | Arg.Bad msg -> p_stderr ("Command line error: " ^ msg); exit (-1);
 

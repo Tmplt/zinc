@@ -22,6 +22,7 @@ let ecit  = "\'"
 (* Error handling *)
 exception TypeError of string
 exception CompilerError of string
+exception InterpreterError of string
 exception UnMatched
 
 let rec mymap m = function

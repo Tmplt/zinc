@@ -33,30 +33,40 @@ let rec beval_ex (st: State__State.id -> (Z.t)) (b: Imp__Imp.bexpr) :
     aeval_ex st a2 in (Z.leq lhs5 rhs5, Z.add (Z.add cntl5 cntr5) Z.one)
   end
 
-let rec ceval_ex (st: State__State.id -> (Z.t)) (c: Imp__Imp.com) :
-  (State__State.id -> (Z.t)) * (Z.t) =
+exception MaxStepsReached of (State__State.id -> (Z.t))
+
+let rec ceval_ex (st: State__State.id -> (Z.t)) (c: Imp__Imp.com)
+                 (maxCnt: Z.t) : (State__State.id -> (Z.t)) * (Z.t) =
+  let (cqt, cnt1) =
   begin match c with
   | Imp__Imp.Cskip -> (st, Z.one)
   | Imp__Imp.Cassign (id, aexpr) ->
-    let (res, cnt1) = aeval_ex st aexpr in
-    (State__State.mixfix_lblsmnrb st id res, Z.add cnt1 Z.one)
+    let (res, cnt2) = aeval_ex st aexpr in
+    (State__State.mixfix_lblsmnrb st id res, Z.add cnt2 Z.one)
   | Imp__Imp.Cseq (c1, c2) ->
-    let (st1, cnt11) = ceval_ex st c1 in let (st2, cnt2) = ceval_ex st1 c2 in
-    (st2, Z.add cnt11 cnt2)
+    let (st1, cnt11) = ceval_ex st c1 maxCnt in let (st2, cnt21) =
+    ceval_ex st1 c2 maxCnt in (st2, Z.add cnt11 cnt21)
   | Imp__Imp.Cif (bexpr, c1, c2) ->
     let (cond, cnt3) = beval_ex st bexpr in
     begin match cond with
-    | true -> let (stqt, cntqt) = ceval_ex st c1 in (stqt, Z.add cnt3 cntqt)
+    | true ->
+      let (stqt, cntqt) = ceval_ex st c1 maxCnt in (stqt, Z.add cnt3 cntqt)
     | false ->
-      let (stqt1, cntqt1) = ceval_ex st c2 in (stqt1, Z.add cnt3 cntqt1)
+      let (stqt1, cntqt1) = ceval_ex st c2 maxCnt in
+      (stqt1, Z.add cnt3 cntqt1)
     end
   | Imp__Imp.Cwhile (bexpr, com) ->
     let (cond1, cnt4) = beval_ex st bexpr in
     begin match cond1 with
     | true ->
-      let (stqt2, cntqt2) = ceval_ex st com in let (stqtqt, cntqtqt) =
-      ceval_ex stqt2 c in (stqtqt, Z.add (Z.add cnt4 cntqt2) cntqtqt)
+      let (stqt2, cntqt2) = ceval_ex st com maxCnt in let (stqtqt, cntqtqt) =
+      ceval_ex stqt2 c maxCnt in (stqtqt, Z.add (Z.add cnt4 cntqt2) cntqtqt)
     | false -> (st, cnt4)
     end
-  end
+  end in
+  if (Z.equal maxCnt Z.zero) || (Z.leq cnt1 maxCnt) then begin
+    (cqt, cnt1) end
+  else
+  begin
+    raise (MaxStepsReached cqt) end
 
