@@ -12,10 +12,12 @@ mkShell {
     gnome2.gtk
     perl
     which
+    autoconf
+    python27Full
 
     # Provers
-    alt-ergo
-    z3
+    #alt-ergo
+    #z3
     eprover
     cvc4
   ];
