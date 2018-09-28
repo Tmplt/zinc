@@ -7,7 +7,7 @@ open Common
 (* extracted code (/extract) *)
 module Compile = Compiler__Compile_com
 module Vm_Ex = Vm_ex__Vm_Ex
-module Imp_Ex = Imp_ex__Imp_Ex
+module Imp_Ex = Imp_ex_assignment__Imp_ex
 module State = State__State
 
 module Imp = Imp__Imp
