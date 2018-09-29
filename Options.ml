@@ -38,7 +38,7 @@ let opt =
   }
 
 let string_of_opt opt =
-  "cimp options:" ^ nl ^
+  "zinc options:" ^ nl ^
   "infile       : " ^ opt.infile ^ nl ^
   "outfile      : " ^ opt.outfile ^ nl ^
   "verbose      : " ^ string_of_bool opt.verbose ^ nl ^

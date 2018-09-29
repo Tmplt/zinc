@@ -5,7 +5,7 @@ TEST_FILES := $(wildcard ./imp_programs/*.imp)
 all: build
 
 build:
-	ocamlbuild -r -use-menhir -I extract -pkg zarith Cimp.native
+	ocamlbuild -r -use-menhir -I extract -pkg zarith Zinc.native
 
 test: build $(TEST_FILES)
 	@./test.sh
