@@ -2,7 +2,7 @@
 
 retval=0
 for test in imp_programs/*.imp; do
-    output=$(./Cimp.native $test -d_ast 2>&1)
+    output=$(./Zinc.native $test -d_ast 2>&1)
     success=$?
     mustfail=$(grep -E "\/\/.*MUSTFAIL" $test)
     passed=0
