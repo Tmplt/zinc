@@ -47,8 +47,10 @@ let
       cp $src/SyncSim.jar $out/libexec
 
       # Create a executable script for convenience
-      echo #!/usr/bin/env bash                                  >> $out/bin/syncsim
-      echo ${pkgs.jre}/bin/java '-jar' $out/libexec/SyncSim.jar >> $out/bin/syncsim
+      cat > $out/bin/syncsim <<EOF
+      #! ${stdenv.shell} -e
+      ${pkgs.jre}/bin/java -jar $out/libexec/SyncSim.jar "\$@"
+      EOF
 
       chmod +x $out/bin/syncsim
     '';
