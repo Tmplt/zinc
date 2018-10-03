@@ -75,7 +75,7 @@ in
 
       # Provers
       #alt-ergo
-      #z3
+      z3
       eprover
       cvc4
     ];
