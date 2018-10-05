@@ -84,8 +84,12 @@ let () =
           ()
       );
 
-      p_stdout ("Done!");
+      (* Generate MIPS assembly *)
+      let outfile = open_out "out.s" in
+      Printf.fprintf outfile "%s\n" (Printer.of_code false code);
+      close_out outfile;
 
+      p_stdout ("Done!");
     with
     | Lexer.SyntaxError msg ->
       raise (CompilerError ("Syntax error: " ^ msg ^ Error.parse_err_msg inBuffer lexbuf));
