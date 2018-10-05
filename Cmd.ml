@@ -21,6 +21,7 @@ let imp_ex        = ref false
 let imp_exn       = ref false
 let imp_exn_limit = ref 0
 let vm_ex         = ref false
+let reg           = ref false
 
 
 let speclist =
@@ -39,6 +40,7 @@ let speclist =
     ("-imp_exn", Arg.Set imp_exn,          "\t: imp_exn evaluation");
     ("-n",       Arg.Set_int imp_exn_limit, "\t: imp_exn step limit");
     ("-vm_ex",   Arg.Set vm_ex,            "\t: vm_ex virtual machine execution");
+    ("-reg",     Arg.Set reg,              "\t: compile code using registers");
   ]
 
 (* check if e is a file extension of s *)
@@ -84,7 +86,8 @@ let cmd =
     opt.vm_ex     <- ! vm_ex;
 
     (* imp_exn step limit *)
-    opt.imp_exn_limit <- !imp_exn_limit;
+    opt.imp_exn_limit <- ! imp_exn_limit;
+    opt.reg           <- ! reg;
   with
   | Arg.Bad msg -> p_stderr ("Command line error: " ^ msg); exit (-1);
 

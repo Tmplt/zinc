@@ -6,6 +6,7 @@ open Common
 
 (* extracted code (/extract) *)
 module Compile = Compiler__Compile_com
+module Compile_Reg = Compiler__Compile_com_reg
 module Vm_Ex = Vm_ex_assignment__Vm_Ex
 module Imp_Ex = Imp_ex_assignment__Imp_ex
 module Imp_Exn = Imp_ex_assignment__Imp_exn
@@ -35,7 +36,10 @@ let () =
       if Options.opt.d_past then
         p_stderr ("Pretty AST:" ^ nl ^ Dump.pretty_of_com 0 com ^ nl);
 
-      let code = Compile.compile_program com in
+      let code = match Options.opt.reg with
+        | false -> Compile.compile_program com
+        | true  -> Compile_Reg.compile_program com
+      in
       if Options.opt.d_code then
         p_stderr ("Raw Code : \n" ^ Dump.of_code false code ^ nl);
       if Options.opt.d_pcode then

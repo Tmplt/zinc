@@ -19,6 +19,7 @@ type options =
     mutable imp_exn:       bool;
     mutable imp_exn_limit: int;
     mutable vm_ex:         bool;
+    mutable reg:           bool;
   }
 
 let opt =
@@ -35,6 +36,7 @@ let opt =
     imp_exn       = false;
     imp_exn_limit = 0;
     vm_ex         = false;
+    reg           = false;
   }
 
 let string_of_opt opt =
@@ -55,4 +57,5 @@ let string_of_opt opt =
                         string_of_int opt.imp_exn_limit ^ " step limit)"
                     )
                     ^ nl ^
-  "vm_ex        : " ^ string_of_bool opt.vm_ex ^ nl
+  "vm_ex        : " ^ string_of_bool opt.vm_ex ^ nl ^
+  "reg          : " ^ string_of_bool opt.reg ^ nl
