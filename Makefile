@@ -13,7 +13,8 @@ test: build $(TEST_FILES)
 extract:
 	cd why3 && \
 	why3 extract --recursive --modular -D ocaml64 -D ocaml64_bv.drv imp_ex_assignment.mlw -o ../extract -L . && \
-	why3 extract --recursive --modular -D ocaml64 -D ocaml64_bv.drv vm_ex_assignment.mlw -o ../extract -L .
+	why3 extract --recursive --modular -D ocaml64 -D ocaml64_bv.drv vm_ex_assignment.mlw -o ../extract -L . && \
+	why3 extract --recursive --modular -D ocaml64 -D ocaml64_bv.drv compiler.mlw -o ../extract -L .
 
 clean:
 	@- rm -rf _build Parser.ml Parser.mli Parser.conflicts

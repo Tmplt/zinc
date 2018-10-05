@@ -1,13 +1,13 @@
-let ult (x: int32) (y2: int32) : bool =
+let ult (x: int32) (y1: int32) : bool =
   Z.lt (SHOULD_NOT_BE_HERE) (SHOULD_NOT_BE_HERE)
 
-let ule (x: int32) (y2: int32) : bool =
+let ule (x: int32) (y1: int32) : bool =
   Z.leq (SHOULD_NOT_BE_HERE) (SHOULD_NOT_BE_HERE)
 
-let ugt (x: int32) (y2: int32) : bool =
+let ugt (x: int32) (y1: int32) : bool =
   Z.gt (SHOULD_NOT_BE_HERE) (SHOULD_NOT_BE_HERE)
 
-let uge (x: int32) (y2: int32) : bool =
+let uge (x: int32) (y1: int32) : bool =
   Z.geq (SHOULD_NOT_BE_HERE) (SHOULD_NOT_BE_HERE)
 
 let slt (v1: int32) (v2: int32) : bool =

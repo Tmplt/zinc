@@ -71,6 +71,7 @@ in
       perl
       which
       autoconf
+      automake
       python27Full
 
       # Provers

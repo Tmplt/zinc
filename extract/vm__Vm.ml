@@ -3,34 +3,35 @@ type pos = Z.t
 type stack = (Z.t) list
 
 type machine_state =
-  | VMS of Z.t * (Z.t) -> (Z.t) * (Z.t) list * State__State.id -> (Z.t)
+  | VMS of (Z.t) * ((Z.t) -> (Z.t)) * ((Z.t) list) *
+      (State__State.id -> (Z.t))
 
 type ofs = Z.t
 
 type instr =
-  | Iload of Z.t * State__State.id
-  | Iimm of Z.t * Z.t
-  | Istore of Z.t * State__State.id
-  | Ipushr of Z.t
-  | Ipopr of Z.t
-  | Iaddr of Z.t * Z.t * Z.t
-  | Iaddur of Z.t * Z.t * Z.t
-  | Isubr of Z.t * Z.t * Z.t
-  | Ibeqr of Z.t * Z.t * Z.t
-  | Ibner of Z.t * Z.t * Z.t
-  | Ibler of Z.t * Z.t * Z.t
-  | Ibgtr of Z.t * Z.t * Z.t
-  | Iconst of Z.t
+  | Iload of (Z.t) * State__State.id
+  | Iimm of (Z.t) * (Z.t)
+  | Istore of (Z.t) * State__State.id
+  | Ipushr of (Z.t)
+  | Ipopr of (Z.t)
+  | Iaddr of (Z.t) * (Z.t) * (Z.t)
+  | Iaddur of (Z.t) * (Z.t) * (Z.t)
+  | Isubr of (Z.t) * (Z.t) * (Z.t)
+  | Ibeqr of (Z.t) * (Z.t) * (Z.t)
+  | Ibner of (Z.t) * (Z.t) * (Z.t)
+  | Ibler of (Z.t) * (Z.t) * (Z.t)
+  | Ibgtr of (Z.t) * (Z.t) * (Z.t)
+  | Iconst of (Z.t)
   | Ivar of State__State.id
   | Isetvar of State__State.id
-  | Ibranch of Z.t
+  | Ibranch of (Z.t)
   | Iadd
   | Iaddu
   | Isub
-  | Ibeq of Z.t
-  | Ibne of Z.t
-  | Ible of Z.t
-  | Ibgt of Z.t
+  | Ibeq of (Z.t)
+  | Ibne of (Z.t)
+  | Ible of (Z.t)
+  | Ibgt of (Z.t)
   | Ihalt
 
 type code = instr list

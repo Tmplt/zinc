@@ -1,5 +1,5 @@
 type id =
-  | Id of Z.t
+  | Id of (Z.t)
 
 type state = id -> (Z.t)
 
@@ -14,5 +14,5 @@ let mixfix_lbrb (f: 'xi -> 'xi1) (x: 'xi) : 'xi1 = f x
 let mixfix_lblsmnrb (f: id -> (Z.t)) (x: id) (v: Z.t) : id -> (Z.t) =
   set f x v
 
-let const (v: Z.t) : id -> (Z.t) = fun (us: id) -> v
+let const (v: Z.t) : id -> (Z.t) = fun (_: id) -> v
 

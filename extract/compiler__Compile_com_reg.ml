@@ -6,8 +6,10 @@ let rec compile_com : 'a . Imp__Imp.com -> ('a Logic__Compiler_logic.hl) =
         Logic__Compiler_logic.prefix_dl (Specs__VM_instr_spec.inil ())
       | Imp__Imp.Cassign (x, a) ->
         Logic__Compiler_logic.infix_mnmn (Logic__Compiler_logic.prefix_dl (
-                                            Compiler__Compile_aexpr.compile_aexpr a))
-          (Logic__Compiler_logic.prefix_dl (Specs__VM_instr_spec.isetvarf x))
+                                            Compiler__Compile_aexpr_reg.compile_aexpr a
+                                              Z.zero))
+          (Logic__Compiler_logic.prefix_dl (Specs__VM_instr_spec.istoref Z.zero
+                                              x))
       | Imp__Imp.Cseq (cmd1, cmd2) ->
         Logic__Compiler_logic.infix_mnmn (Logic__Compiler_logic.prefix_dl (
                                             compile_com cmd1))
@@ -20,16 +22,18 @@ let rec compile_com : 'a . Imp__Imp.com -> ('a Logic__Compiler_logic.hl) =
             (Logic__Compiler_logic.prefix_dl (Specs__VM_instr_spec.ibranchf (Z.of_int (List.length code_false)))) in
         Logic__Compiler_logic.infix_mnmn (Logic__Compiler_logic.infix_mnmn (
                                             Logic__Compiler_logic.prefix_dl (
-                                              Compiler__Compile_bexpr.compile_bexpr cond
+                                              Compiler__Compile_bexpr_reg.compile_bexpr cond
                                                 false
-                                                (Z.of_int (List.length code_true))))
+                                                (Z.of_int (List.length code_true))
+                                                Z.zero))
                                             (Logic__Compiler_logic.infix_pc code_true))
           (Logic__Compiler_logic.infix_pc (Logic__Compiler_logic.prefix_dl code_false))
       | Imp__Imp.Cwhile (test, body) ->
         let code_body = compile_com body in
         let body_length = Z.add (Z.of_int (List.length code_body)) Z.one in
         let code_test =
-          Compiler__Compile_bexpr.compile_bexpr test false body_length in
+          Compiler__Compile_bexpr_reg.compile_bexpr test false body_length
+            Z.zero in
         let ofs = Z.add (Z.of_int (List.length code_test)) body_length in
         let wp_while =
           Logic__Compiler_logic.infix_mnmn (Logic__Compiler_logic.prefix_dl code_test)

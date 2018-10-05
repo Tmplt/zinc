@@ -6,10 +6,11 @@ open Common
 
 (* extracted code (/extract) *)
 module Compile = Compiler__Compile_com
-module Vm_Ex = Vm_ex__Vm_Ex
+module Vm_Ex = Vm_ex_assignment__Vm_Ex
 module Imp_Ex = Imp_ex_assignment__Imp_ex
 module Imp_Exn = Imp_ex_assignment__Imp_exn
 module State = State__State
+module Reg = State__Reg
 
 module Imp = Imp__Imp
 
@@ -41,6 +42,7 @@ let () =
         p_stderr ("Pretty Code : \n" ^ Dump.of_code true code ^ nl);
 
       let st_0 = State.const (Z.of_int 0) in (* assume all variables 0 *)
+      let reg_0 = Reg.const (Z.of_int 0) in
 
       (* imp_ex execution *)
       if Options.opt.imp_ex then (
@@ -68,11 +70,11 @@ let () =
       (* vm_ex execution *)
       if Options.opt.vm_ex then (
         try
-          let _ = Vm_Ex.instr_iter_ex code (VMS (Z.of_int 0, [], st_0)) in
+          let _ = Vm_Ex.instr_iter_ex code (VMS (Z.of_int 0, reg_0, [], st_0)) in
           ()
         with
         | Vm_Ex.Err -> p_stderr ("execution error")
-        | Vm_Ex.Halt (VMS (pos, stack, st_halt)) ->
+        | Vm_Ex.Halt (VMS (pos, _, stack, st_halt)) ->
           p_stdout ("execution halted");
           p_stdout ("instr_iter_ex" ^ nl ^ Env.to_string st_halt ^ nl);
           ()
