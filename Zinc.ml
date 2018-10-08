@@ -86,7 +86,7 @@ let () =
 
       (* Generate MIPS assembly *)
       let outfile = open_out "out.s" in
-      Printf.fprintf outfile "%s\n" (Printer.of_code false code);
+      Printf.fprintf outfile "%s\n" (Printer.of_code code);
       close_out outfile;
 
       p_stdout ("Done!");
