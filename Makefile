@@ -16,5 +16,11 @@ extract:
 	why3 extract --recursive --modular -D ocaml64 -D ocaml64_bv.drv vm_ex_assignment.mlw -o ../extract -L . && \
 	why3 extract --recursive --modular -D ocaml64 -D ocaml64_bv.drv compiler.mlw -o ../extract -L .
 
+mips: # TODO: make this target %.s instead
+	sde-as -march=r3k -O0 out.s -o mips.o && \
+	sde-ld -T linker_script mips.o -o mips.out && \
+	sde-objdump -h -z -s -d -t mips.out > mips_ext_program.objdump
+	@- rm mips.out mips.o
+
 clean:
-	@- rm -rf _build Parser.ml Parser.mli Parser.conflicts
+	@- rm -rf _build Parser.ml Parser.mli Parser.conflicts *.out *.objdump

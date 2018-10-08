@@ -8,3 +8,4 @@ _build
 imp_programs/test.imp
 .direnv.*
 **/*.bak
+*.s
