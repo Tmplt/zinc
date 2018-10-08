@@ -7,11 +7,16 @@ open Vm__Vm
 open Env
 open Common
 
-(* XXX: How should these be implemented? See why3/vm.mlw *)
+(* TODO:
+ *  - Fix branch instructions (they cannot take relative addresses)
+ *  - Add comment above every chunk explaining what it does
+ *  - Format generated assembly to be more readable
+ *      - Indent with 8 spaces, making space for eventual labels
+ *      - tabulate the arguments so that they aling
+ *)
 
 let incstack = "addiu $sp, $sp, -4" ^ nl
 let decstack = "addiu $sp, $sp, 4" ^ nl
-
 
 (* Push n onto the stack via temporary registers *)
 let pushi (n:Z.t) =
