@@ -89,7 +89,8 @@ let () =
       Printf.fprintf outfile "%s\n" (Printer.of_code code);
       close_out outfile;
 
-      p_stdout ("Done!");
+      (* TODO: compile final MIPS objdump file *)
+
     with
     | Lexer.SyntaxError msg ->
       raise (CompilerError ("Syntax error: " ^ msg ^ Error.parse_err_msg inBuffer lexbuf));
