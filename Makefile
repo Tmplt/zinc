@@ -7,6 +7,10 @@ all: build
 build:
 	ocamlbuild -r -use-menhir -I extract -pkg zarith Zinc.native
 
+debug:
+	ocamlbuild -cflag "-g" -r -use-menhir -I extract -pkg zarith Zinc.native
+	export OCAMLRUNPARAM=b
+
 test: build $(TEST_FILES)
 	@./test.sh
 

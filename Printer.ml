@@ -4,7 +4,6 @@
 open Imp__Imp
 open State__State
 open Vm__Vm
-open Env
 open Common
 open Z
 
@@ -79,7 +78,11 @@ let of_instr currlabel = function
   | Iconst n        -> (* push n on stack *)
     pushi n
   | Ivar id         -> (* push the value of id onto stack *)
-    pushi (Z.of_string (get_id id))
+    begin
+      match id with
+      | Id i -> pushi i
+      | _ -> assert false
+    end
   | Isetvar id      -> (* pop an integer, assign it to a variable *)
     pop 1 ^
     "sw $t1, " ^ ofs_of_id id ^ "($gp)"
