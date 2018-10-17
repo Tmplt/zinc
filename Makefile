@@ -23,8 +23,11 @@ extract:
 mips: # TODO: make this target %.s instead
 	sde-as -march=r3k -O0 out.s -o mips.o && \
 	sde-ld -T linker_script mips.o -o mips.out && \
-	sde-objdump -h -z -s -d -t mips.out > mips_ext_program.objdump
+	sde-objdump -h -z -s -d -t mips.out > mips_ext_program.objdump || \
 	@- rm mips.out mips.o
 
+mem: mips
+	syncsim --no-gui --mips mips_ext_program.objdump --output-mem
+
 clean:
-	@- rm -rf _build Parser.ml Parser.mli Parser.conflicts *.out *.objdump
+	@- rm -rf _build Parser.ml Parser.mli Parser.conflicts *.out *.objdump *.o
