@@ -27,7 +27,7 @@ mips: # TODO: make this target %.s instead
 	@- rm mips.out mips.o
 
 mem: mips
-	syncsim --no-gui --mips mips_ext_program.objdump --output-mem
+	syncsim --no-gui --mips mips_ext_program.objdump --output-mem -c 65535
 
 clean:
 	@- rm -rf _build Parser.ml Parser.mli Parser.conflicts *.out *.objdump *.o
