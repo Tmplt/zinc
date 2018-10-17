@@ -9,3 +9,6 @@ imp_programs/test.imp
 .direnv.*
 **/*.bak
 *.s
+*.o
+mips.out
+*.objdump
