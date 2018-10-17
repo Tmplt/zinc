@@ -21,7 +21,7 @@ let decstack = "addiu $sp, $sp, 4" ^ nl
 let pushi (n:Z.t) =
   "li $t0, " ^ Z.to_string n ^ nl ^
   incstack ^
-  "sw $1, 0($sp)"
+  "sw $t0, 0($sp)"
 
 (* pop value into passed register (temporary) *)
 let pop (reg:int) =
@@ -39,7 +39,7 @@ let ofs_of_id id =
 
 let string_of_reg idr = "$" ^ Z.to_string idr
 let string_of_label label = "label_" ^ Z.to_string label ^ ":" ^ nl
-let string_of_label' label = "label_" ^ Z.to_string label ^ nl
+let string_of_label' label = "label_" ^ Z.to_string (Z.add label (Z.of_int 1)) ^ nl
 
 let of_instr currlabel = function
   (* new instructions, register based *)
@@ -76,19 +76,25 @@ let of_instr currlabel = function
 
   (* original/old instructions for stack machine *)
   | Iconst n        -> (* push n on stack *)
+    "# Iconst" ^ nl ^
     pushi n
   | Ivar id         -> (* push the value of id onto stack *)
     begin
       match id with
-      | Id i -> pushi i
+      | Id i ->
+        "# Ivar" ^ nl ^
+        pushi i
       | _ -> assert false
     end
   | Isetvar id      -> (* pop an integer, assign it to a variable *)
+    "# Isetvar" ^ nl ^
     pop 1 ^
     "sw $t1, " ^ ofs_of_id id ^ "($gp)"
   | Ibranch ofs     -> (* skip ofs instructions *)
+    "# Ibranch" ^ nl ^
     "b " ^ string_of_label' (currlabel + ofs)
   | Iadd            -> (* pop two values, push their sum *)
+    "# Iadd" ^ nl ^
     (* pop the values *)
     pop 1 ^
     pop' 2 ^
@@ -96,6 +102,7 @@ let of_instr currlabel = function
     "add $t1, $1, $2"    ^ nl ^
     "sw $t1, 0($sp)"
   | Iaddu           -> (* pop two values, push their sum (wrapping) *)
+    "# Iaddu" ^ nl ^
     (* pop the values *)
     pop 1 ^
     pop' 2 ^
@@ -103,33 +110,47 @@ let of_instr currlabel = function
     "addu $t1, $t1, $t2"   ^ nl ^
     "sw $t1, 0($sp)"
   | Isub            -> (* pop two values, push their difference *)
+    "# Isub" ^ nl ^
     pop 1 ^
     pop' 2 ^
     (* push their difference *)
     "sub $t1, $t1, $t2" ^ nl ^
     "sw $t1, 0($sp)"
   | Ibeq ofs        -> (* pop a, b, skip ofs forward if a = b *)
+    "# Ibeq" ^ nl ^
     pop 1 ^
     pop 2 ^
     "beq $t1, $t2, " ^ string_of_label' (currlabel + ofs)
   | Ibne ofs        -> (* pop a, b, skip ofs forward if a != b *)
+    "# Ibne" ^ nl ^
     pop 1 ^
     pop 2 ^
     "bne $t1, $t2, " ^ string_of_label' (currlabel + ofs)
   | Ible ofs        -> (* pop a, b, skip ofs forward if b <= a *)
+    "# Ible" ^ nl ^
     pop 1 ^ (* a *)
     pop 2 ^ (* b *)
     (* b <= a -> a > b -> a - b > 0 *)
     "sub $t0, $t1, $t2" ^ nl ^
     "bgtz $t0, " ^ string_of_label' (currlabel + ofs)
   | Ibgt ofs        -> (* pop a, b, skip ofs forward if b > a *)
+    "# Ibgt" ^ nl ^
     pop 1 ^ (* a *)
     pop 2 ^ (* b *)
     (* b > a -> b - a > 0 *)
     "sub $t0, $t2, $t1" ^ nl ^
     "bgtz $t0, " ^ string_of_label' (currlabel + ofs)
   | Ihalt           -> (* end of program, loop forevermore *)
-    "b " ^ string_of_label' currlabel
+    "# Ihalt" ^ nl ^
+    "b " ^ string_of_label' (Z.sub currlabel (Z.of_int 1)) (* TODO: fix this decrement *)
+
+let preamble =
+  ".data\n" ^
+  ".space 1024\n" ^
+  ".set noreorder\n" ^ (* Avoid code optimisation *)
+  ".set noat\n" ^ (* Disable warnings for accessing $at *)
+  ".text\n" ^
+  "la $gp, .data\n" (* Set $gp to accessible data area *)
 
 (* TODO: final newline is applied here, strip it from of_instr above *)
 let of_code code =
@@ -140,8 +161,7 @@ let of_code code =
         string_of_label labelid ^
         of_instr labelid i ^ nl ^ nl ^ of_code' il (labelid + (Z.of_int 1))
   in
-  ".text" ^ nl ^
-  ".set noreorder" ^ nl ^ nl ^
+  preamble ^ nl ^
   of_code' code (Z.of_int 0)
 
 (* vim: shiftwidth=2:
