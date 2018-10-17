@@ -111,7 +111,7 @@ let of_instr currlabel = function
     pop 1 ^
     pop' 2 ^
     (* push their difference *)
-    "sub $t1, $t1, $t2" ^ nl ^
+    "sub $t1, $t2, $t1" ^ nl ^
     "sw $t1, 0($sp)"
   | Ibeq ofs        -> (* pop a, b, skip ofs forward if a = b *)
     "# Ibeq" ^ nl ^
