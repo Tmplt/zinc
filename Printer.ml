@@ -37,23 +37,25 @@ let ofs_of_id id =
   | Id i -> Z.to_string (Z.mul i (Z.of_int 4))
   | _ -> assert false
 
-let string_of_reg idr = "$" ^ Z.to_string idr
+(* Offset the register ID with 2, so that we do not use $zero/$at; they are problematic *)
+let string_of_reg idr = "$" ^ Z.to_string (Z.add idr (Z.of_int 2))
+
 let string_of_label label = "label_" ^ Z.to_string label ^ ":" ^ nl
 let string_of_label' label = "label_" ^ Z.to_string (Z.add label (Z.of_int 1)) ^ nl
 
 let of_instr currlabel = function
   (* new instructions, register based *)
   | Iload (idr, id) -> (* load register with variable *)
-    "lw $" ^ Z.to_string idr ^ ", " ^ ofs_of_id id ^ "($gp)"
+    "lw " ^ string_of_reg idr ^ ", " ^ ofs_of_id id ^ "($gp)"
   | Iimm (idr, n)   -> (* load register with value n *)
-    "li $" ^ Z.to_string idr ^ ", " ^ Z.to_string n
+    "li " ^ string_of_reg idr ^ ", " ^ Z.to_string n
   | Istore (idr, id) -> (* store a register to variable *)
-    "sw $" ^ Z.to_string idr ^ ", " ^ ofs_of_id id ^ "($gp)"
+    "sw " ^ string_of_reg idr ^ ", " ^ ofs_of_id id ^ "($gp)"
   | Ipushr idr       -> (* push register on stack *)
     incstack ^
-    "lw $" ^ Z.to_string idr ^ ", 0($sp)"
+    "lw " ^ string_of_reg idr ^ ", 0($sp)"
   | Ipopr idr        -> (* pop from stack into register *)
-    "lw $" ^ Z.to_string idr ^ ", 0($sp)" ^
+    "lw " ^ string_of_reg idr ^ ", 0($sp)" ^
     decstack
   | Iaddr (lhs, rhs, res) -> (* add two registers, store result in third *)
     "add " ^ string_of_reg res ^ ", " ^ string_of_reg lhs ^ ", " ^ string_of_reg rhs
