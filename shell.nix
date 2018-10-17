@@ -1,4 +1,4 @@
-with import (fetchTarball https://github.com/nixos/nixpkgs/archive/master.tar.gz) {};
+with import <nixpkgs> {};
 
 let
   i686Linux = import <nixpkgs> { system = "i686-linux"; };
