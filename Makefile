@@ -31,3 +31,10 @@ mem: mips
 
 clean:
 	@- rm -rf _build Parser.ml Parser.mli Parser.conflicts *.out *.objdump *.o
+
+%:
+	./Zinc.native imp_programs/$@ && \
+	sde-as -march=r3k -O0 out.s -o mips.o && \
+	sde-ld -T linker_script mips.o -o mips.out && \
+	sde-objdump -h -z -s -d -t mips.out > mips_ext_program.objdump || \
+	@- rm mips.out mips.o
