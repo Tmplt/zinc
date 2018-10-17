@@ -30,7 +30,7 @@ let pop (reg:int) =
 
 (* pop value into passed register (without changing $sp) *)
 let pop' (reg:int) =
-  "lw $" ^ string_of_int reg ^ ", 0($sp)" ^ nl
+  "lw $t" ^ string_of_int reg ^ ", 0($sp)" ^ nl
 
 let ofs_of_id id =
   match id with
@@ -79,13 +79,10 @@ let of_instr currlabel = function
     "# Iconst" ^ nl ^
     pushi n
   | Ivar id         -> (* push the value of id onto stack *)
-    begin
-      match id with
-      | Id i ->
-        "# Ivar" ^ nl ^
-        pushi i
-      | _ -> assert false
-    end
+    "# Ivar" ^ nl ^
+    "lw $t0, " ^ ofs_of_id id ^ "($gp)" ^ nl ^
+    incstack ^
+    "sw $t0, 0($sp)"
   | Isetvar id      -> (* pop an integer, assign it to a variable *)
     "# Isetvar" ^ nl ^
     pop 1 ^
@@ -99,7 +96,7 @@ let of_instr currlabel = function
     pop 1 ^
     pop' 2 ^
     (* push their sum *)
-    "add $t1, $1, $2"    ^ nl ^
+    "add $t1, $t1, $t2"    ^ nl ^
     "sw $t1, 0($sp)"
   | Iaddu           -> (* pop two values, push their sum (wrapping) *)
     "# Iaddu" ^ nl ^
