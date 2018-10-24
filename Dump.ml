@@ -30,7 +30,7 @@ let rec of_com = function
   | Cskip           -> "Cskip"
   | Cassign (id, a) -> "Cassign " ^ of_id id ^ " " ^ of_aexpr a
   | Cseq (c1, c2)   -> "Cseq (" ^ of_com c1 ^ ") (" ^ of_com c2 ^ ")"
-  | Cif (b, c1, c2) -> "Cif (" ^ of_bexpr b ^ ") (" ^ of_com c1 ^ " " ^ of_com c2 ^ ")"
+  | Cif (b, c1, c2) -> "Cif (" ^ of_bexpr b ^ ") (" ^ of_com c1 ^ ") (" ^ of_com c2 ^ ")"
   | Cwhile (b, c)   -> "Cwhile (" ^ of_bexpr b ^ ") (" ^ of_com c ^ ")"
 
 (* AST dump for the IMP lanaguage *)
