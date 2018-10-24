@@ -12,6 +12,7 @@ module Imp_Ex = Imp_ex_assignment__Imp_ex
 module Imp_Exn = Imp_ex_assignment__Imp_exn
 module State = State__State
 module Reg = State__Reg
+module Opt = Ast_opt__Ast_opt
 
 module Imp = Imp__Imp
 
@@ -35,6 +36,9 @@ let () =
         p_stderr ("Raw AST:" ^ nl ^ Dump.of_com com ^ nl);
       if Options.opt.d_past then
         p_stderr ("Pretty AST:" ^ nl ^ Dump.pretty_of_com 0 com ^ nl);
+
+      (* Perform AST optimisations *)
+      let com = Opt.opt_com com in
 
       let code = match Options.opt.reg with
         | false -> Compile.compile_program com

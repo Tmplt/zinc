@@ -34,6 +34,15 @@ let rec compile_aexpr :
                                                  (Z.add idr Z.one))))
           (Logic__Compiler_logic.prefix_dl (Specs__VM_instr_spec.isubrf (Z.add idr Z.one)
                                               idr idr))
+      | Imp__Imp.Asubu (a1, a2) ->
+        Logic__Compiler_logic.infix_mnmn (Logic__Compiler_logic.infix_mnmn (
+                                            Logic__Compiler_logic.prefix_dl (
+                                              compile_aexpr a2 idr))
+                                            (Logic__Compiler_logic.prefix_dl (
+                                               compile_aexpr a1
+                                                 (Z.add idr Z.one))))
+          (Logic__Compiler_logic.prefix_dl (Specs__VM_instr_spec.isuburf (Z.add idr Z.one)
+                                              idr idr))
       end in Logic__Compiler_logic.hoare c
 
 let compile_aexpr_natural (a: Imp__Imp.aexpr) (idr: Z.t) : Vm__Vm.instr list

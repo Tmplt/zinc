@@ -6,6 +6,8 @@ let rec aeval_ex (st: State__State.id -> (Z.t)) (e: Imp__Imp.aexpr) : Z.t =
   | Imp__Imp.Aaddu (e1, e2) ->
     Bv_op__BV_OP.bv_add (aeval_ex st e1) (aeval_ex st e2)
   | Imp__Imp.Asub (e1, e2) -> Z.sub (aeval_ex st e1) (aeval_ex st e2)
+  | Imp__Imp.Asubu (e1, e2) ->
+    Bv_op__BV_OP.bv_sub (aeval_ex st e1) (aeval_ex st e2)
   end
 
 let rec beval_ex (st: State__State.id -> (Z.t)) (b: Imp__Imp.bexpr) : bool =

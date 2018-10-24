@@ -13,6 +13,10 @@ let rec aeval_ex (st: State__State.id -> (Z.t)) (e: Imp__Imp.aexpr) :
   | Imp__Imp.Asub (e1, e2) ->
     let (lhs2, cntl2) = aeval_ex st e1 in let (rhs2, cntr2) =
     aeval_ex st e2 in (Z.sub lhs2 rhs2, Z.add (Z.add cntl2 cntr2) Z.one)
+  | Imp__Imp.Asubu (e1, e2) ->
+    let (lhs3, cntl3) = aeval_ex st e1 in let (rhs3, cntr3) =
+    aeval_ex st e2 in
+    (Bv_op__BV_OP.bv_sub lhs3 rhs3, Z.add (Z.add cntl3 cntr3) Z.one)
   end
 
 let rec beval_ex (st: State__State.id -> (Z.t)) (b: Imp__Imp.bexpr) :
@@ -23,14 +27,14 @@ let rec beval_ex (st: State__State.id -> (Z.t)) (b: Imp__Imp.bexpr) :
   | Imp__Imp.Bnot bqt ->
     let (bqtqt, cnt) = beval_ex st bqt in (not bqtqt, Z.add cnt Z.one)
   | Imp__Imp.Band (b1, b2) ->
-    let (lhs3, cntl3) = beval_ex st b1 in let (rhs3, cntr3) =
-    beval_ex st b2 in (lhs3 && rhs3, Z.add (Z.add cntl3 cntr3) Z.one)
+    let (lhs4, cntl4) = beval_ex st b1 in let (rhs4, cntr4) =
+    beval_ex st b2 in (lhs4 && rhs4, Z.add (Z.add cntl4 cntr4) Z.one)
   | Imp__Imp.Beq (a1, a2) ->
-    let (lhs4, cntl4) = aeval_ex st a1 in let (rhs4, cntr4) =
-    aeval_ex st a2 in (Z.equal lhs4 rhs4, Z.add (Z.add cntl4 cntr4) Z.one)
-  | Imp__Imp.Ble (a1, a2) ->
     let (lhs5, cntl5) = aeval_ex st a1 in let (rhs5, cntr5) =
-    aeval_ex st a2 in (Z.leq lhs5 rhs5, Z.add (Z.add cntl5 cntr5) Z.one)
+    aeval_ex st a2 in (Z.equal lhs5 rhs5, Z.add (Z.add cntl5 cntr5) Z.one)
+  | Imp__Imp.Ble (a1, a2) ->
+    let (lhs6, cntl6) = aeval_ex st a1 in let (rhs6, cntr6) =
+    aeval_ex st a2 in (Z.leq lhs6 rhs6, Z.add (Z.add cntl6 cntr6) Z.one)
   end
 
 exception MaxStepsReached of (State__State.id -> (Z.t))

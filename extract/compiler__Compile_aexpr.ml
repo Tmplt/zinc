@@ -28,6 +28,13 @@ let rec compile_aexpr :
                                             (Logic__Compiler_logic.prefix_dl (
                                                compile_aexpr a2)))
           (Logic__Compiler_logic.prefix_dl (Specs__VM_instr_spec.isubf ()))
+      | Imp__Imp.Asubu (a1, a2) ->
+        Logic__Compiler_logic.infix_mnmn (Logic__Compiler_logic.infix_mnmn (
+                                            Logic__Compiler_logic.prefix_dl (
+                                              compile_aexpr a1))
+                                            (Logic__Compiler_logic.prefix_dl (
+                                               compile_aexpr a2)))
+          (Logic__Compiler_logic.prefix_dl (Specs__VM_instr_spec.isubuf ()))
       end in Logic__Compiler_logic.hoare c
 
 let compile_aexpr_natural (a: Imp__Imp.aexpr) : Vm__Vm.instr list =

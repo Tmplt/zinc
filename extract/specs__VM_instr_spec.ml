@@ -35,6 +35,10 @@ let isubrf (x1: Z.t) (x2: Z.t) (x3: Z.t) : 'a Logic__Compiler_logic.hl =
   let c = Logic__Compiler_logic.prefix_dl (ifunf (Vm__Vm.isubr x1 x2 x3)) in
   Logic__Compiler_logic.hoare c
 
+let isuburf (x1: Z.t) (x2: Z.t) (x3: Z.t) : 'a Logic__Compiler_logic.hl =
+  let c = Logic__Compiler_logic.prefix_dl (ifunf (Vm__Vm.isubur x1 x2 x3)) in
+  Logic__Compiler_logic.hoare c
+
 let ibeqrf (x1: Z.t) (x2: Z.t) (ofs: Z.t) : 'a Logic__Compiler_logic.hl =
   Logic__Compiler_logic.hoare (Logic__Compiler_logic.prefix_dl (ifunf (
                                                                   Vm__Vm.ibeqr x1
@@ -74,6 +78,9 @@ let iadduf (_2: unit) : 'a Logic__Compiler_logic.hl =
   create_binop Vm__Vm.iaddu
 
 let isubf (_2: unit) : 'a Logic__Compiler_logic.hl = create_binop Vm__Vm.isub
+
+let isubuf (_2: unit) : 'a Logic__Compiler_logic.hl =
+  create_binop Vm__Vm.isubu
 
 let inil (_2: unit) : 'a Logic__Compiler_logic.hl = []
 

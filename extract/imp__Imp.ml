@@ -4,6 +4,7 @@ type aexpr =
   | Aadd of aexpr * aexpr
   | Asub of aexpr * aexpr
   | Aaddu of aexpr * aexpr
+  | Asubu of aexpr * aexpr
 
 type bexpr =
   | Btrue

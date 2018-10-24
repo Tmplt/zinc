@@ -17,6 +17,7 @@ type instr =
   | Iaddr of (Z.t) * (Z.t) * (Z.t)
   | Iaddur of (Z.t) * (Z.t) * (Z.t)
   | Isubr of (Z.t) * (Z.t) * (Z.t)
+  | Isubur of (Z.t) * (Z.t) * (Z.t)
   | Ibeqr of (Z.t) * (Z.t) * (Z.t)
   | Ibner of (Z.t) * (Z.t) * (Z.t)
   | Ibler of (Z.t) * (Z.t) * (Z.t)
@@ -28,6 +29,7 @@ type instr =
   | Iadd
   | Iaddu
   | Isub
+  | Isubu
   | Ibeq of (Z.t)
   | Ibne of (Z.t)
   | Ible of (Z.t)
@@ -57,6 +59,9 @@ let iaddur (x1: Z.t) (x2: Z.t) (x3: Z.t) : instr list =
 let isubr (x1: Z.t) (x2: Z.t) (x3: Z.t) : instr list =
   (Isubr (x1, x2, x3)) :: []
 
+let isubur (x1: Z.t) (x2: Z.t) (x3: Z.t) : instr list =
+  (Isubur (x1, x2, x3)) :: []
+
 let ibeqr (x1: Z.t) (x2: Z.t) (ofs: Z.t) : instr list =
   (Ibeqr (x1, x2, ofs)) :: []
 
@@ -80,6 +85,8 @@ let iadd  : instr list = Iadd :: []
 let iaddu  : instr list = Iaddu :: []
 
 let isub  : instr list = Isub :: []
+
+let isubu  : instr list = Isubu :: []
 
 let ibeq (ofs: Z.t) : instr list = (Ibeq ofs) :: []
 

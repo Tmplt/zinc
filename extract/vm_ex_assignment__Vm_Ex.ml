@@ -106,7 +106,7 @@ let instr_ex (c: Vm__Vm.instr list) (ms: Vm__Vm.machine_state) : Vm__Vm.machine_
         | Vm__Vm.Iaddu ->
           let (n12, sqt3) = pop s in let (n21, sqtqt1) = pop sqt3 in
           Vm__Vm.VMS ((Z.add p Z.one), r,
-            (Vm__Vm.push (Bv_op__BV_OP.bv_add n12 n21) sqtqt1), m)
+            (Vm__Vm.push (Bv_op__BV_OP.bv_add n21 n12) sqtqt1), m)
         | Vm__Vm.Isub ->
           let (n13, sqt4) = pop s in let (n22, sqtqt2) = pop sqt4 in
           Vm__Vm.VMS ((Z.add p Z.one), r,
