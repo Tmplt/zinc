@@ -55,10 +55,26 @@ let rec opt_bexpr (b: Imp__Imp.bexpr) : Imp__Imp.bexpr =
     end
   | Imp__Imp.Beq (a1, a2) ->
     let a1qt = opt_aexpr a1 in
-    let a2qt = opt_aexpr a2 in Imp__Imp.Beq (a1qt, a2qt)
+    let a2qt = opt_aexpr a2 in
+    begin match (a1qt, a2qt) with
+    | (Imp__Imp.Anum lhs7, Imp__Imp.Anum rhs7) ->
+      if Z.equal lhs7 rhs7 then begin Imp__Imp.Btrue end
+      else
+      begin
+        Imp__Imp.Bfalse end
+    | (_, _) -> Imp__Imp.Beq (a1qt, a2qt)
+    end
   | Imp__Imp.Ble (a1, a2) ->
     let a1qt = opt_aexpr a1 in
-    let a2qt = opt_aexpr a2 in Imp__Imp.Ble (a1qt, a2qt)
+    let a2qt = opt_aexpr a2 in
+    begin match (a1qt, a2qt) with
+    | (Imp__Imp.Anum lhs7, Imp__Imp.Anum rhs7) ->
+      if Z.leq lhs7 rhs7 then begin Imp__Imp.Btrue end
+      else
+      begin
+        Imp__Imp.Bfalse end
+    | (_, _) -> Imp__Imp.Ble (a1qt, a2qt)
+    end
   | Imp__Imp.Band (b1, b2) ->
     let b1qt = opt_bexpr b1 in
     let b2qt = opt_bexpr b2 in
