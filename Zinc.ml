@@ -40,6 +40,11 @@ let () =
       (* Perform AST optimisations *)
       let com = Opt.opt_com com in
 
+      if Options.opt.d_ast then
+        p_stderr ("Raw AST (optimized):" ^ nl ^ Dump.of_com com ^ nl);
+      if Options.opt.d_past then
+        p_stderr ("Pretty AST (optimized):" ^ nl ^ Dump.pretty_of_com 0 com ^ nl);
+
       let code = match Options.opt.reg with
         | false -> Compile.compile_program com
         | true  -> Compile_Reg.compile_program com
