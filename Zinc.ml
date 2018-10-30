@@ -38,7 +38,10 @@ let () =
         p_stderr ("Pretty AST:" ^ nl ^ Dump.pretty_of_com 0 com ^ nl);
 
       (* Perform AST optimisations *)
-      let com = Opt.opt_com com in
+      let com = match Options.opt.opti with
+        | true  -> Opt.opt_com com
+        | false -> com
+      in
 
       if Options.opt.d_ast then
         p_stderr ("Raw AST (optimized):" ^ nl ^ Dump.of_com com ^ nl);
