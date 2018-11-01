@@ -93,47 +93,41 @@ let tc_unify2 ch t1 s1 t2 s2 : types =
 let get_id_type itl (id : id) : types * span =
   try
     List.assoc id itl
-  with 
+  with
     _ -> raise (TypeError("Undeclared identifier: " ^ Dump.pretty_of_id id))
 
-let rec tc_aexpr ch itl (a, span) : Imp.aexpr * types =  
+
+let rec tc_aexpr ch itl (a, span) : Imp.aexpr * types =
+  let rec tc_check_types ch itl (a1, a1_span) (a2, a2_span) t =
+    (* type check first argument *)
+    let (ai1, t1) = tc_aexpr ch itl (a1, a1_span) in
+    let _ = tc_unify ch t t1 a1_span in
+
+    (* type check second argument *)
+    let (ai2, t2) = tc_aexpr ch itl (a2, a2_span) in
+    let _ = tc_unify ch t t2 a2_span in
+    (ai1, ai2)
+  in
+
   (* try *)
   match a with
   | Anum n -> (Imp.Anum n, Tint)
-  | Avar id -> 
+  | Avar id ->
     let (t, _ ) = get_id_type itl id in
     (Imp.Avar id, t)
-  | Aadd ((a1, a1_span), (a2, a2_span)) -> 
-    (* type check a1 against Tsint *)
-    let (ai1, t1) = tc_aexpr ch itl (a1, a1_span) in
-    let _ = tc_unify ch Tsint t1 a1_span in
 
-    (* type check a2 against Tsint *)
-    let (ai2, t2) = tc_aexpr ch itl (a2, a2_span) in
-    let _ = tc_unify ch Tsint t2 a2_span in
-
-    (Imp.Aadd(ai1, ai2), Tsint) 
-  | Aaddu ((a1, a1_span), (a2, a2_span)) -> 
-    (* type check a1 against Tuint32 *)
-    let (ai1, t1) = tc_aexpr ch itl (a1, a1_span) in
-    let _ = tc_unify ch Tuint32 t1 a1_span in
-
-    (* type check a2 against Tuint32 *)
-    let (ai2, t2) = tc_aexpr ch itl (a2, a2_span) in
-    let _ = tc_unify ch Tuint32 t2 a2_span in
-
+  | Aadd ((a1, a1_span), (a2, a2_span)) ->
+    let (ai1, ai2) = tc_check_types ch itl (a1, a1_span) (a2, a2_span) Tsint in
+    (Imp.Aadd(ai1, ai2), Tsint)
+  | Aaddu ((a1, a1_span), (a2, a2_span)) ->
+    let (_, t1) = tc_aexpr ch itl (a1, a1_span) in
+    let (ai1, ai2) = tc_check_types ch itl (a1, a1_span) (a2, a2_span) Tuint32 in
     (Imp.Aaddu(ai1, ai2), t1)
-
-  | Asub ((a1, a1_span), (a2, a2_span)) -> 
-    (* type check a1 against Tsint *)
-    let (ai1, t1) = tc_aexpr ch itl (a1, a1_span) in
-    let _ = tc_unify ch Tsint t1 a1_span in
-
-    (* type check a2 against Tsint *)
-    let (ai2, t2) = tc_aexpr ch itl (a2, a2_span) in
-    let _ = tc_unify ch Tsint t2 a2_span in
-
+  | Asub ((a1, a1_span), (a2, a2_span)) ->
+    let (_, t1) = tc_aexpr ch itl (a1, a1_span) in
+    let (ai1, ai2) = tc_check_types ch itl (a1, a1_span) (a2, a2_span) Tsint in
     (Imp.Asub(ai1, ai2), t1)
+
   | Acast (t, a_span) ->
     let (_, span) = a_span in
     match t with
@@ -146,10 +140,8 @@ let rec tc_aexpr ch itl (a, span) : Imp.aexpr * types =
       (a, t)
 
 
-(* with
-   | TypeError msg -> raise (TypeError (msg ^ nl ^ "in expression:" ^ of_span ch span )) *)
 
-let rec tc_bexpr ch itl (b, span) = 
+let rec tc_bexpr ch itl (b, span) =
   try
     match b with
     | Btrue -> Imp.Btrue
