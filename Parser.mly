@@ -11,7 +11,7 @@
 %token IF ELSE WHILE
 %token LC RC
 %token TRUE FALSE AND NOT BEQ BLT BGT
-%token SC C LP RP ASSIGN PLUS PLUSU MINUS
+%token SC C LP RP ASSIGN PLUS PLUSU MINUS MINUSU
 %token INC DEC
 %token EOF
 
@@ -19,7 +19,7 @@
 
 %left LC RC
 %left NOT
-%left PLUS PLUSU MINUS
+%left PLUS PLUSU MINUS MINUSU
 %left AND
 %left SC
 
@@ -108,6 +108,8 @@ aexpr:
   | aexpr_span PLUSU aexpr_span                               { Aaddu ($1, $3) }
   | aexpr_span MINUS aexpr_span                               { Asub ($1, $3) }
   | MINUS aexpr_span                                          { Asub ((_zero, ($startofs, $endofs)), $2) }
+  | aexpr_span MINUSU aexpr_span                              { Asubu ($1, $3) }
+  | MINUSU aexpr_span                                         { Asubu ((_zero, ($startofs, $endofs)), $2) }
 
   (* Casting to another type *)
   | LP primtype RP aexpr_span                                 { Acast ($2, $4) }

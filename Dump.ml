@@ -17,6 +17,7 @@ let rec of_aexpr = function
   | Aadd (e1, e2)   -> "Aadd (" ^ of_aexpr e1 ^ ") (" ^ of_aexpr e2 ^")"
   | Aaddu (e1, e2)  -> "Aaddu (" ^ of_aexpr e1 ^ ") (" ^ of_aexpr e2 ^")"
   | Asub (e1, e2)   -> "Asub (" ^ of_aexpr e1 ^ ") (" ^ of_aexpr e2 ^")"
+  | Asubu (e1, e2)  -> "Asubu (" ^ of_aexpr e1 ^ ") (" ^ of_aexpr e2 ^")"
 
 let rec of_bexpr = function
   | Btrue           -> "Btrue"
@@ -42,6 +43,7 @@ let rec pretty_of_aexpr = function
   | Aadd (e1, e2)   -> "(" ^ pretty_of_aexpr e1 ^ " + " ^ pretty_of_aexpr e2 ^")"
   | Aaddu (e1, e2)  -> "(" ^ pretty_of_aexpr e1 ^ " +u " ^ pretty_of_aexpr e2 ^")"
   | Asub (e1, e2)   -> "(" ^ pretty_of_aexpr e1 ^ " - " ^ pretty_of_aexpr e2 ^")"
+  | Asubu (e1, e2)  -> "(" ^ pretty_of_aexpr e1 ^ " - " ^ pretty_of_aexpr e2 ^")"
 
 let rec pretty_of_bexpr = function
   | Btrue           -> "TRUE"

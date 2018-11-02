@@ -14,6 +14,7 @@ type aexpr =
   | Aadd of aexpr_span * aexpr_span
   | Aaddu of aexpr_span * aexpr_span
   | Asub of aexpr_span * aexpr_span
+  | Asubu of aexpr_span * aexpr_span
   | Acast of types * aexpr_span
 and
   aexpr_span = aexpr * span

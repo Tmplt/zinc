@@ -127,6 +127,10 @@ let rec tc_aexpr ch itl (a, span) : Imp.aexpr * types =
     let (_, t1) = tc_aexpr ch itl (a1, a1_span) in
     let (ai1, ai2) = tc_check_types ch itl (a1, a1_span) (a2, a2_span) Tsint in
     (Imp.Asub(ai1, ai2), t1)
+  | Asubu ((a1, a1_span), (a2, a2_span)) ->
+    let (_, t1) = tc_aexpr ch itl (a1, a1_span) in
+    let (ai1, ai2) = tc_check_types ch itl (a1, a1_span) (a2, a2_span) Tuint32 in
+    (Imp.Asubu(ai1, ai2), t1)
 
   | Acast (t, a_span) ->
     let (_, span) = a_span in

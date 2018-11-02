@@ -1,14 +1,11 @@
 let rec opt_aexpr (e: Imp__Imp.aexpr) : Imp__Imp.aexpr =
   begin match e with
   | Imp__Imp.Anum n -> Imp__Imp.Anum n
-  | Imp__Imp.Avar x -> Imp__Imp.Avar x
+  | Imp__Imp.Avar id -> Imp__Imp.Avar id
   | Imp__Imp.Aadd (e1, e2) ->
     let e1qt = opt_aexpr e1 in
     let e2qt = opt_aexpr e2 in
-    begin match (e1qt, e2qt) with
-    | (Imp__Imp.Anum n1, Imp__Imp.Anum n2) -> Imp__Imp.Anum (Z.add n1 n2)
-    | (_, _) -> Imp__Imp.Aadd (e1qt, e2qt)
-    end
+    let (_, _) = (e1qt, e2qt) in Imp__Imp.Aadd (e1qt, e2qt)
   | Imp__Imp.Aaddu (e1, e2) ->
     let e1qt = opt_aexpr e1 in
     let e2qt = opt_aexpr e2 in
@@ -57,8 +54,8 @@ let rec opt_bexpr (b: Imp__Imp.bexpr) : Imp__Imp.bexpr =
     let a1qt = opt_aexpr a1 in
     let a2qt = opt_aexpr a2 in
     begin match (a1qt, a2qt) with
-    | (Imp__Imp.Anum lhs7, Imp__Imp.Anum rhs7) ->
-      if Z.equal lhs7 rhs7 then begin Imp__Imp.Btrue end
+    | (Imp__Imp.Anum lhs, Imp__Imp.Anum rhs) ->
+      if Z.equal lhs rhs then begin Imp__Imp.Btrue end
       else
       begin
         Imp__Imp.Bfalse end
@@ -68,8 +65,8 @@ let rec opt_bexpr (b: Imp__Imp.bexpr) : Imp__Imp.bexpr =
     let a1qt = opt_aexpr a1 in
     let a2qt = opt_aexpr a2 in
     begin match (a1qt, a2qt) with
-    | (Imp__Imp.Anum lhs7, Imp__Imp.Anum rhs7) ->
-      if Z.leq lhs7 rhs7 then begin Imp__Imp.Btrue end
+    | (Imp__Imp.Anum lhs, Imp__Imp.Anum rhs) ->
+      if Z.leq lhs rhs then begin Imp__Imp.Btrue end
       else
       begin
         Imp__Imp.Bfalse end
@@ -82,6 +79,8 @@ let rec opt_bexpr (b: Imp__Imp.bexpr) : Imp__Imp.bexpr =
     | (Imp__Imp.Btrue, Imp__Imp.Btrue) -> Imp__Imp.Btrue
     | (Imp__Imp.Bfalse, _) -> Imp__Imp.Bfalse
     | (_, Imp__Imp.Bfalse) -> Imp__Imp.Bfalse
+    | (Imp__Imp.Btrue, b3) -> b3
+    | (b3, Imp__Imp.Btrue) -> b3
     | (_, _) ->
       if b1qt = b2qt then begin b1qt end
       else
@@ -108,10 +107,10 @@ let rec opt_com (c: Imp__Imp.com) : Imp__Imp.com =
     end
   | Imp__Imp.Cwhile (b, c1) ->
     let bqt = opt_bexpr b in
-    let cqt1 = opt_com c1 in
+    let cqt = opt_com c1 in
     begin match bqt with
     | Imp__Imp.Bfalse -> Imp__Imp.Cskip
-    | _ -> Imp__Imp.Cwhile (bqt, cqt1)
+    | _ -> Imp__Imp.Cwhile (bqt, cqt)
     end
   end
 

@@ -54,6 +54,7 @@ rule lex = parse
   | '+'                  { PLUS }
   | "+u"                 { PLUSU }
   | '-'                  { MINUS }
+  | "-u"                 { MINUSU }
 
   | "++"                 { INC }
   | "--"                 { DEC }
