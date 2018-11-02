@@ -111,34 +111,38 @@ let instr_ex (c: Vm__Vm.instr list) (ms: Vm__Vm.machine_state) : Vm__Vm.machine_
           let (n13, sqt4) = pop s in let (n22, sqtqt2) = pop sqt4 in
           Vm__Vm.VMS ((Z.add p Z.one), r,
             (Vm__Vm.push (Z.sub n22 n13) sqtqt2), m)
+        | Vm__Vm.Isubu ->
+          let (n14, sqt5) = pop s in let (n23, sqtqt3) = pop sqt5 in
+          Vm__Vm.VMS ((Z.add p Z.one), r,
+            (Vm__Vm.push (Bv_op__BV_OP.bv_sub n23 n14) sqtqt3), m)
         | Vm__Vm.Ibeq ofs ->
-          let (n23, sqt5) = pop s in let (n14, sqtqt3) = pop sqt5 in
-          Vm__Vm.VMS ((Z.add (Z.add p Z.one) (if Z.equal n14 n23 then begin
-                                                ofs end
-                                              else
-                                              begin
-                                                Z.zero end)), r, sqtqt3, m)
-        | Vm__Vm.Ibne ofs ->
           let (n24, sqt6) = pop s in let (n15, sqtqt4) = pop sqt6 in
-          Vm__Vm.VMS ((Z.add (Z.add p Z.one) (if not (Z.equal n15 n24) then
-                                                begin ofs end
+          Vm__Vm.VMS ((Z.add (Z.add p Z.one) (if Z.equal n15 n24 then begin
+                                                ofs end
                                               else
                                               begin
                                                 Z.zero end)), r, sqtqt4, m)
-        | Vm__Vm.Ible ofs ->
+        | Vm__Vm.Ibne ofs ->
           let (n25, sqt7) = pop s in let (n16, sqtqt5) = pop sqt7 in
-          Vm__Vm.VMS ((Z.add (Z.add p Z.one) (if Z.leq n16 n25 then begin
-                                                ofs end
+          Vm__Vm.VMS ((Z.add (Z.add p Z.one) (if not (Z.equal n16 n25) then
+                                                begin ofs end
                                               else
                                               begin
                                                 Z.zero end)), r, sqtqt5, m)
-        | Vm__Vm.Ibgt ofs ->
+        | Vm__Vm.Ible ofs ->
           let (n26, sqt8) = pop s in let (n17, sqtqt6) = pop sqt8 in
-          Vm__Vm.VMS ((Z.add (Z.add p Z.one) (if Z.gt n17 n26 then begin
+          Vm__Vm.VMS ((Z.add (Z.add p Z.one) (if Z.leq n17 n26 then begin
                                                 ofs end
                                               else
                                               begin
                                                 Z.zero end)), r, sqtqt6, m)
+        | Vm__Vm.Ibgt ofs ->
+          let (n27, sqt9) = pop s in let (n18, sqtqt7) = pop sqt9 in
+          Vm__Vm.VMS ((Z.add (Z.add p Z.one) (if Z.gt n18 n27 then begin
+                                                ofs end
+                                              else
+                                              begin
+                                                Z.zero end)), r, sqtqt7, m)
         | Vm__Vm.Ihalt -> raise (Halt ms)
         | _ -> raise Err
         end
